@@ -213,6 +213,12 @@ module TypesafeEnum
           expect(s2.hash).to eq(s1.hash)
         end
       end
+
+      it 'always returns a Fixnum' do
+        Suit.each do |s1|
+          expect(s1.hash).to be_a(Fixnum)
+        end
+      end
     end
 
     describe '#eql?' do

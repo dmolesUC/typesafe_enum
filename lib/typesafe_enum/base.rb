@@ -1,37 +1,46 @@
 module TypesafeEnum
+  # Base class for typesafe enum classes.
   class Base
     include Comparable
 
     class << self
 
+      # Returns an array of the enum instances in declaration order
       def to_a
         as_array.dup
       end
 
+      # Returns the number of enum instances
       def size
         as_array ? as_array.length : 0
       end
 
+      # Iterates over the set of enum instances
       def each(&block)
         to_a.each(&block)
       end
 
+      # Iterates over the set of enum instances
       def each_with_index(&block)
         to_a.each_with_index(&block)
       end
 
+      # Iterates over the set of enum instances
       def map(&block)
         to_a.map(&block)
       end
 
+      # Looks up an enum instance based on its key
       def find_by_key(key)
         by_key[key]
       end
 
+      # Looks up an enum instance based on its value
       def find_by_value(value)
         by_value[value]
       end
 
+      # Looks up an enum instance based on its ordinal
       def find_by_ord(ord)
         return nil if ord < 0 || ord > size
         as_array[ord]
@@ -82,10 +91,14 @@ module TypesafeEnum
 
     end
 
+    # The symbol key for the enum instance
     attr_reader :key
+    # The value encapsulated by the enum instance
     attr_reader :value
+    # The ordinal of the enum instance, in declaration order
     attr_reader :ord
 
+    # Compares two instances of the same enum class based on their declaration order
     def <=>(other)
       ord <=> other.ord if self.class == other.class
     end
@@ -95,7 +108,7 @@ module TypesafeEnum
         result = 17
         result = 31 * result + self.class.hash
         result = 31 * result + ord
-        result
+        result.is_a?(Fixnum) ? result : result.hash
       end
     end
 
