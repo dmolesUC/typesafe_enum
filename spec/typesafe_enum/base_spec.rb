@@ -16,6 +16,7 @@ end
 
 module TypesafeEnum
   describe Base do
+
     describe '::define' do
       it 'defines a constant enum value' do
         enum = Suit::CLUBS
@@ -216,7 +217,7 @@ module TypesafeEnum
         keys = [:CLUBS, :DIAMONDS, :HEARTS, :SPADES]
         expected = Suit.to_a
         keys.each_with_index do |k, index|
-          expect Suit[k].to be(expected[index])
+          expect(Suit[k]).to be(expected[index])
         end
       end
 
@@ -224,7 +225,7 @@ module TypesafeEnum
         names = %w(Clubs Diamonds Hearts Spades)
         expected = Suit.to_a
         names.each_with_index do |n, index|
-          expect Suit[n].to be(expected[index])
+          expect(Suit[n]).to be(expected[index])
         end
       end
 

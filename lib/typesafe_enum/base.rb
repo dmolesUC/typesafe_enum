@@ -3,25 +3,34 @@ module TypesafeEnum
     include Comparable
 
     class << self
-      @@_by_key = {}
-      @@_by_name = {}
-      @@_as_array = []
 
       def [](lookup)
-        return @@_by_key[lookup] if lookup.is_a?(Symbol)
-        return @@_as_array[lookup] if lookup.is_a?(Integer)
-        @@_by_name[lookup]
+        return by_key[lookup] if lookup.is_a?(Symbol)
+        return as_array[lookup] if lookup.is_a?(Integer)
+        by_name[lookup]
       end
 
       def to_a
-        @@_as_array.dup
+        as_array.dup
       end
 
       def length
-        @@_as_array.length
+        as_array.length
+      end
+
+      def each(&block)
+        to_a.each(&block)
+      end
+
+      def each_with_index(&block)
+        to_a.each_with_index(&block)
       end
 
       private
+
+      attr_accessor :by_key
+      attr_accessor :by_name
+      attr_accessor :as_array
 
       def undefine_class
         enclosing_module = Module.nesting.last
@@ -30,7 +39,11 @@ module TypesafeEnum
       end
 
       def define(key, name = nil)
-        instance = new(key, name)
+        self.by_key ||= {}
+        self.by_name ||= {}
+        self.as_array ||= []
+
+        instance = new(key, name, as_array.length)
         k, n = instance.key, instance.name
 
         if self[k]
@@ -43,9 +56,9 @@ module TypesafeEnum
           fail NameError, "A #{self.name} instance with name '#{n}' already exists" if self[n]
         end
 
-        @@_by_key[k] = instance
-        @@_by_name[n] = instance
-        @@_as_array << instance
+        by_key[k] = instance
+        by_name[n] = instance
+        as_array << instance
         self.const_set(key.to_s, instance)
       end
 
@@ -53,13 +66,19 @@ module TypesafeEnum
 
     attr_reader :key
     attr_reader :name
+    attr_reader :ordinal
+
+    def <=>(value)
+      self.ordinal <=> value.ordinal if self.class == value.class
+    end
 
     private
 
-    def initialize(key, name)
+    def initialize(key, name, ordinal)
       raise TypeError, "#{key} is not a symbol" unless key.is_a?(Symbol)
       @key = key
       @name = name || key.to_s.downcase
+      @ordinal = ordinal
     end
 
   end

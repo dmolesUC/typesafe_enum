@@ -6,3 +6,9 @@
 [![Gem Version](https://img.shields.io/gem/v/typesafe_enum.svg)](https://github.com/dmolesUC3/typesafe_enum/releases)
 
 A Ruby implementation of Joshua Bloch's [typesafe enum pattern](http://www.oracle.com/technetwork/java/page1-139488.html#replaceenums).
+
+## Adding behavior to enum instances
+
+## How is this different from [Ruby::Enum](https://github.com/dblock/ruby-enum)?
+
+
