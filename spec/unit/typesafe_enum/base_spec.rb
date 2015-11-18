@@ -86,9 +86,9 @@ module TypesafeEnum
       end
     end
 
-    describe '::length' do
+    describe '::size' do
       it 'returns the number of enum instnaces' do
-        expect(Suit.length).to eq(4)
+        expect(Suit.size).to eq(4)
       end
     end
 
@@ -243,10 +243,10 @@ module TypesafeEnum
       end
     end
 
-    describe '#ordinal' do
-      it 'returns the ordinal value of the enum instance' do
+    describe '#ord' do
+      it 'returns the ord value of the enum instance' do
         Suit.each_with_index do |s, index|
-          expect(s.ordinal).to eq(index)
+          expect(s.ord).to eq(index)
         end
       end
     end
@@ -304,23 +304,24 @@ module TypesafeEnum
       end
     end
 
-    describe '::find_by_ordinal' do
+    describe '::find_by_ord' do
 
-      it 'maps ordial indices to enum instances' do
+      it 'maps ordinal indices to enum instances' do
         Suit.each do |s|
-          expect(Suit.find_by_ordinal(s.ordinal)).to be(s)
+          expect(Suit.find_by_ord(s.ord)).to be(s)
         end
       end
 
-      it 'supports negative indices' do
-        Suit.each_with_index do |s, index|
-          negative_index = index - Suit.length
-          expect(Suit.find_by_ordinal(negative_index)).to be(s)
-        end
+      it 'returns nil for negative indices' do
+        expect(Suit.find_by_ord(-1)).to be_nil
+      end
+
+      it 'returns nil for out-of-range indices' do
+        expect(Suit.find_by_ord(Suit.size)).to be_nil
       end
 
       it 'returns nil for invalid indices' do
-        expect(Suit.find_by_ordinal(100)).to be_nil
+        expect(Suit.find_by_ord(100)).to be_nil
       end
     end
 

@@ -8,7 +8,7 @@ module TypesafeEnum
         as_array.dup
       end
 
-      def length
+      def size
         as_array.length
       end
 
@@ -32,8 +32,9 @@ module TypesafeEnum
         by_name[name]
       end
 
-      def find_by_ordinal(ordinal)
-        as_array[ordinal]
+      def find_by_ord(ord)
+        return nil if ord < 0 || ord > size
+        as_array[ord]
       end
 
       private
@@ -51,7 +52,7 @@ module TypesafeEnum
       def define(key, name = nil) # rubocop:disable
         ensure_registries
 
-        instance = new(key, name, as_array.length)
+        instance = new(key, name, size)
         key, name = valid_key_and_name(instance)
 
         by_key[key] = instance
@@ -85,28 +86,28 @@ module TypesafeEnum
 
     attr_reader :key
     attr_reader :name
-    attr_reader :ordinal
+    attr_reader :ord
 
     def <=>(other)
-      ordinal <=> other.ordinal if self.class == other.class
+      ord <=> other.ord if self.class == other.class
     end
 
     def hash
       @hash ||= begin
         result = 17
         result = 31 * result + self.class.hash
-        result = 31 * result + ordinal
+        result = 31 * result + ord
         result
       end
     end
 
     private
 
-    def initialize(key, name, ordinal)
+    def initialize(key, name, ord)
       fail TypeError, "#{key} is not a symbol" unless key.is_a?(Symbol)
       @key = key
       @name = name || key.to_s.downcase
-      @ordinal = ordinal
+      @ord = ord
     end
 
   end

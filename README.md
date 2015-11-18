@@ -29,7 +29,7 @@ name:
 
 ```ruby
 Suit::CLUBS
-# => #<Suit:0x007fe9b3ba2698 @key=:CLUBS, @name="clubs", @ordinal=0>
+# => #<Suit:0x007fe9b3ba2698 @key=:CLUBS, @name="clubs", @ord=0>
 ```
 
 By default, the `name` of an instance is its `key` symbol, lowercased:
@@ -69,11 +69,11 @@ Scale::KILO.name
 # => 1000
 ```
 
-Enum instances have an `ordinal` value corresponding to their declaration
+Enum instances have an ordinal value corresponding to their declaration
 order:
 
 ```ruby
-Suit::SPADES.ordinal
+Suit::SPADES.ord
 # => 3
 ```
 
@@ -92,7 +92,7 @@ Returns an array of the enum instances in declaration order:
 
 ```ruby
 Tarot.to_a
-# => [#<Tarot:0x007fd4db30eca8 @key=:CUPS, @name="Cups", @ordinal=0>, #<Tarot:0x007fd4db30ebe0 @key=:COINS, @name="Coins", @ordinal=1>, #<Tarot:0x007fd4db30eaf0 @key=:WANDS, @name="Wands", @ordinal=2>, #<Tarot:0x007fd4db30e9b0 @key=:SWORDS, @name="Swords", @ordinal=3>]
+# => [#<Tarot:0x007fd4db30eca8 @key=:CUPS, @name="Cups", @ord=0>, #<Tarot:0x007fd4db30ebe0 @key=:COINS, @name="Coins", @ord=1>, #<Tarot:0x007fd4db30eaf0 @key=:WANDS, @name="Wands", @ord=2>, #<Tarot:0x007fd4db30e9b0 @key=:SWORDS, @name="Swords", @ord=3>]
 ```
 
 ### `::length`
@@ -125,17 +125,17 @@ Suit.map(&:name)
 # => ["clubs", "diamonds", "hearts", "spades"]
 ```
 
-### `::find_by_key`, `::find_by_name`, `::find_by_ordinal`
+### `::find_by_key`, `::find_by_name`, `::find_by_ord`
 
 Look up an enum instance based on its key, name, or ordinal:
 
 ```ruby
 Tarot.find_by_key(:CUPS)
-# => #<Tarot:0x007faab19fda40 @key=:CUPS, @name="Cups", @ordinal=0>
+# => #<Tarot:0x007faab19fda40 @key=:CUPS, @name="Cups", @ord=0>
 Tarot.find_by_name('Wands')
-# => #<Tarot:0x007faab19fd8b0 @key=:WANDS, @name="Wands", @ordinal=2>
-Tarot.find_by_ordinal(3)
-# => #<Tarot:0x007faab19fd810 @key=:SWORDS, @name="Swords", @ordinal=3>
+# => #<Tarot:0x007faab19fd8b0 @key=:WANDS, @name="Wands", @ord=2>
+Tarot.find_by_ord(3)
+# => #<Tarot:0x007faab19fd810 @key=:SWORDS, @name="Swords", @ord=3>
 ```
 
 ## Enum classes with methods
@@ -152,7 +152,7 @@ class Suit < TypesafeEnum::Base
   ALL_PIPS = %w(♣ ♦ ♥ ♠)
 
   def pip
-    ALL_PIPS[self.ordinal]
+    ALL_PIPS[self.ord]
   end
 end
 
