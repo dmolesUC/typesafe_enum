@@ -25,23 +25,23 @@ end
 ```
 
 A constant is declared for each instance, with the key symbol as its
-name:
+value:
 
 ```ruby
 Suit::CLUBS
-# => #<Suit:0x007fe9b3ba2698 @key=:CLUBS, @name="clubs", @ord=0>
+# => #<Suit:0x007fe9b3ba2698 @key=:CLUBS, @value="clubs", @ord=0>
 ```
 
-By default, the `name` of an instance is its `key` symbol, lowercased:
+By default, the `value` of an instance is its `key` symbol, lowercased:
 
 ```ruby
 Suit::CLUBS.key
 # => :CLUBS
-Suit::CLUBS.name
+Suit::CLUBS.value
 # => 'clubs'
 ```
 
-But you can also new an explicit `name`:
+But you can also new an explicit `value`:
 
 ```ruby
 class Tarot < TypesafeEnum::Base
@@ -51,11 +51,11 @@ class Tarot < TypesafeEnum::Base
   new :SWORDS, 'Swords'
 end
 
-Tarot::CUPS.name
+Tarot::CUPS.value
 # => 'Cups'
 ```
 
-And `names` need not be strings:
+And `values` need not be strings:
 
 ```ruby
 class Scale < TypesafeEnum::Base
@@ -65,7 +65,7 @@ class Scale < TypesafeEnum::Base
   new :MEGA, 1_000_000
 end
 
-Scale::KILO.name
+Scale::KILO.value
 # => 1000
 ```
 
@@ -92,7 +92,7 @@ Returns an array of the enum instances in declaration order:
 
 ```ruby
 Tarot.to_a
-# => [#<Tarot:0x007fd4db30eca8 @key=:CUPS, @name="Cups", @ord=0>, #<Tarot:0x007fd4db30ebe0 @key=:COINS, @name="Coins", @ord=1>, #<Tarot:0x007fd4db30eaf0 @key=:WANDS, @name="Wands", @ord=2>, #<Tarot:0x007fd4db30e9b0 @key=:SWORDS, @name="Swords", @ord=3>]
+# => [#<Tarot:0x007fd4db30eca8 @key=:CUPS, @value="Cups", @ord=0>, #<Tarot:0x007fd4db30ebe0 @key=:COINS, @value="Coins", @ord=1>, #<Tarot:0x007fd4db30eaf0 @key=:WANDS, @value="Wands", @ord=2>, #<Tarot:0x007fd4db30e9b0 @key=:SWORDS, @value="Swords", @ord=3>]
 ```
 
 ### `::size`
@@ -109,7 +109,7 @@ Suit.size
 Iterate over the set of enum instances:
 
 ```ruby
-Suit.each { |s| puts s.name }
+Suit.each { |s| puts s.value }
 # clubs
 # diamonds
 # hearts
@@ -121,21 +121,21 @@ Suit.each_with_index { |s, i| puts "#{i}: #{s.key}" }
 # 2: HEARTS
 # 3: SPADES
 
-Suit.map(&:name)
+Suit.map(&:value)
 # => ["clubs", "diamonds", "hearts", "spades"]
 ```
 
-### `::find_by_key`, `::find_by_name`, `::find_by_ord`
+### `::find_by_key`, `::find_by_value`, `::find_by_ord`
 
-Look up an enum instance based on its key, name, or ordinal:
+Look up an enum instance based on its key, value, or ordinal:
 
 ```ruby
 Tarot.find_by_key(:CUPS)
-# => #<Tarot:0x007faab19fda40 @key=:CUPS, @name="Cups", @ord=0>
-Tarot.find_by_name('Wands')
-# => #<Tarot:0x007faab19fd8b0 @key=:WANDS, @name="Wands", @ord=2>
+# => #<Tarot:0x007faab19fda40 @key=:CUPS, @value="Cups", @ord=0>
+Tarot.find_by_value('Wands')
+# => #<Tarot:0x007faab19fd8b0 @key=:WANDS, @value="Wands", @ord=2>
 Tarot.find_by_ord(3)
-# => #<Tarot:0x007faab19fd810 @key=:SWORDS, @name="Swords", @ord=3>
+# => #<Tarot:0x007faab19fd810 @key=:SWORDS, @value="Swords", @ord=3>
 ```
 
 ## Enum classes with methods
@@ -177,11 +177,11 @@ Suit.map(&:pip)
 as seen in C, [C++](https://msdn.microsoft.com/en-us/library/2dzy4k6e.aspx),
 [C#](https://msdn.microsoft.com/en-us/library/sbbt4032.aspx), and
 [Objective-C](https://developer.apple.com/library/ios/releasenotes/ObjectiveC/ModernizationObjC/AdoptingModernObjective-C/AdoptingModernObjective-C.html#//apple_ref/doc/uid/TP40014150-CH1-SW6).
-In C and most C-like languages, an `enum` is simply a named set of `int` values
+In C and most C-like languages, an `enum` is simply a valued set of `int` values
 (though C++ and others require an explicit cast to assign an `enum` value to
 an `int` variable).
 
-Similarly, a `Ruby::Enum` class is simply a named set of values of any type,
+Similarly, a `Ruby::Enum` class is simply a valued set of values of any type,
 with convenience methods for iterating over the set. Usually the values are
 strings, but they can be of any type.
 
@@ -217,9 +217,9 @@ Java introduced the concept of "typesafe enums", first as a
 [design pattern]((http://www.oracle.com/technetwork/java/page1-139488.html#replaceenums))
 and later as a
 [first-class language construct](https://docs.oracle.com/javase/1.5.0/docs/guide/language/enums.html).
-In Java, an `Enum` class news a closed, named set of _instances of that class,_ rather than
+In Java, an `Enum` class news a closed, valued set of _instances of that class,_ rather than
 of a primitive type such as an `int`, and those instances have all the features of other objects,
-such as methods, fields, and type membership. Likewise, a `TypesafeEnum` class news a named set
+such as methods, fields, and type membership. Likewise, a `TypesafeEnum` class news a valued set
 of instances of that class, rather than of a set of some other type.
 
 ```ruby
@@ -251,7 +251,7 @@ can always work around that:
 
 ```ruby
 Suit.send(:new, :JOKERS)
-# => #<Suit:0x007fc9e44e4778 @key=:JOKERS, @name="jokers", @ord=4>
+# => #<Suit:0x007fc9e44e4778 @key=:JOKERS, @value="jokers", @ord=4>
 Suit.map(&:key)
 # => [:CLUBS, :DIAMONDS, :HEARTS, :SPADES, :JOKERS]
 Suit.size

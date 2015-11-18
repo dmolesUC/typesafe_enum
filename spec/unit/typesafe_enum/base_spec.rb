@@ -58,7 +58,7 @@ module TypesafeEnum
         expect { Cheat.class }.to raise_error(NameError)
       end
 
-      it 'disallows duplicate names' do
+      it 'disallows duplicate values' do
         expect do
           class Cheat < Base
             new :SPADES, 'spades'
@@ -69,11 +69,11 @@ module TypesafeEnum
         expect { Cheat.class }.to raise_error(NameError)
       end
 
-      it 'defaults the name to a lower-cased version of the symbol' do
-        expect(Suit::CLUBS.name).to eq('clubs')
-        expect(Suit::DIAMONDS.name).to eq('diamonds')
-        expect(Suit::HEARTS.name).to eq('hearts')
-        expect(Suit::SPADES.name).to eq('spades')
+      it 'defaults the value to a lower-cased version of the symbol' do
+        expect(Suit::CLUBS.value).to eq('clubs')
+        expect(Suit::DIAMONDS.value).to eq('diamonds')
+        expect(Suit::HEARTS.value).to eq('hearts')
+        expect(Suit::SPADES.value).to eq('spades')
       end
 
       it 'is private' do
@@ -232,11 +232,11 @@ module TypesafeEnum
       end
     end
 
-    describe '#name' do
-      it 'returns the string name of the enum instance' do
+    describe '#value' do
+      it 'returns the string value of the enum instance' do
         expected = %w(clubs diamonds hearts spades)
         Suit.each_with_index do |s, index|
-          expect(s.name).to eq(expected[index])
+          expect(s.value).to eq(expected[index])
         end
       end
     end
@@ -272,20 +272,20 @@ module TypesafeEnum
       end
     end
 
-    describe '::find_by_name' do
-      it 'maps names to enum instances' do
-        names = %w(clubs diamonds hearts spades)
+    describe '::find_by_value' do
+      it 'maps values to enum instances' do
+        values = %w(clubs diamonds hearts spades)
         expected = Suit.to_a
-        names.each_with_index do |n, index|
-          expect(Suit.find_by_name(n)).to be(expected[index])
+        values.each_with_index do |n, index|
+          expect(Suit.find_by_value(n)).to be(expected[index])
         end
       end
 
-      it 'returns nil for invalid names' do
-        expect(Suit.find_by_name('wands')).to be_nil
+      it 'returns nil for invalid values' do
+        expect(Suit.find_by_value('wands')).to be_nil
       end
 
-      it 'supports enums with symbol names' do
+      it 'supports enums with symbol values' do
         class RGBColors < Base
           new :RED, :red
           new :GREEN, :green
@@ -293,11 +293,11 @@ module TypesafeEnum
         end
 
         RGBColors.each do |c|
-          expect(RGBColors.find_by_name(c.name)).to be(c)
+          expect(RGBColors.find_by_value(c.value)).to be(c)
         end
       end
 
-      it 'supports enums with integer names' do
+      it 'supports enums with integer values' do
         class Scale < Base
           new :DECA, 10
           new :HECTO, 100
@@ -306,7 +306,7 @@ module TypesafeEnum
         end
 
         Scale.each do |s|
-          expect(Scale.find_by_name(s.name)).to be(s)
+          expect(Scale.find_by_value(s.value)).to be(s)
         end
       end
     end

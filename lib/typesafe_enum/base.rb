@@ -28,8 +28,8 @@ module TypesafeEnum
         by_key[key]
       end
 
-      def find_by_name(name)
-        by_name[name]
+      def find_by_value(value)
+        by_value[value]
       end
 
       def find_by_ord(ord)
@@ -40,50 +40,50 @@ module TypesafeEnum
       private
 
       attr_accessor :by_key
-      attr_accessor :by_name
+      attr_accessor :by_value
       attr_accessor :as_array
 
       def undefine_class
         enclosing_module = Module.nesting.last
-        class_name = name.split('::').last || ''
-        enclosing_module.send(:remove_const, class_name)
+        class_value = name.split('::').last || ''
+        enclosing_module.send(:remove_const, class_value)
       end
 
       def register(instance)
         ensure_registries
-        key, name = valid_key_and_name(instance)
+        key, value = valid_key_and_value(instance)
 
         by_key[key] = instance
-        by_name[name] = instance
+        by_value[value] = instance
         as_array << instance
         const_set(key.to_s, instance)
       end
 
       def ensure_registries
         self.by_key ||= {}
-        self.by_name ||= {}
+        self.by_value ||= {}
         self.as_array ||= []
       end
 
-      def valid_key_and_name(instance)
+      def valid_key_and_value(instance)
         key = instance.key
-        name = instance.name
+        value = instance.value
 
         begin
-          fail NameError, "#{self.name}::#{key} already exists" if find_by_key(key)
-          fail NameError, "A #{self.name} instance with name '#{name}' already exists" if find_by_name(name)
+          fail NameError, "#{name}::#{key} already exists" if find_by_key(key)
+          fail NameError, "A #{name} instance with value '#{value}' already exists" if find_by_value(value)
         rescue NameError => e
           undefine_class
           raise e
         end
 
-        [key, name]
+        [key, value]
       end
 
     end
 
     attr_reader :key
-    attr_reader :name
+    attr_reader :value
     attr_reader :ord
 
     def <=>(other)
@@ -101,10 +101,10 @@ module TypesafeEnum
 
     private
 
-    def initialize(key, name = nil)
+    def initialize(key, value = nil)
       fail TypeError, "#{key} is not a symbol" unless key.is_a?(Symbol)
       @key = key
-      @name = name || key.to_s.downcase
+      @value = value || key.to_s.downcase
       @ord = self.class.size
       self.class.class_exec(self) do |instance|
         register(instance)
