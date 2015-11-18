@@ -41,7 +41,7 @@ Suit::CLUBS.value
 # => 'clubs'
 ```
 
-But you can also new an explicit `value`:
+But you can also declare an explicit `value`:
 
 ```ruby
 class Tarot < TypesafeEnum::Base
@@ -69,6 +69,8 @@ Scale::KILO.value
 # => 1000
 ```
 
+## Ordering
+
 Enum instances have an ordinal value corresponding to their declaration
 order:
 
@@ -77,11 +79,15 @@ Suit::SPADES.ord
 # => 3
 ```
 
-And enum instances are comparable based on that order:
+And enum instances are comparable (within a type) based on that order:
 
 ```ruby
+Suit::SPADES.is_a?(Comparable)
+# => true
 Suit::SPADES > Suit::DIAMONDS
 # => true
+Suit::SPADES > Tarot::CUPS
+# ArgumentError: comparison of Suit with Tarot failed
 ```
 
 ## Convenience methods on enum classes

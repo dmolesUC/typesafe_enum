@@ -1,3 +1,5 @@
+# A Ruby implementation of Joshua Bloch's
+# [typesafe enum pattern](http://www.oracle.com/technetwork/java/page1-139488.html#replaceenums)
 module TypesafeEnum
   # Base class for typesafe enum classes.
   class Base
@@ -103,6 +105,7 @@ module TypesafeEnum
       ord <=> other.ord if self.class == other.class
     end
 
+    # Generates a Fixnum hash value for this enum instance
     def hash
       @hash ||= begin
         result = 17
