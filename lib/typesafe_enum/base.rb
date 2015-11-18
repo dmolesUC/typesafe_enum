@@ -5,9 +5,13 @@ module TypesafeEnum
     class << self
 
       def [](lookup)
-        return by_key[lookup] if lookup.is_a?(Symbol)
-        return as_array[lookup] if lookup.is_a?(Integer)
-        by_name[lookup]
+        result = by_key[lookup]
+        return result if result
+
+        result = by_name[lookup]
+        return result if result
+
+        as_array[lookup] if lookup.is_a?(Integer)
       end
 
       def to_a
@@ -42,29 +46,37 @@ module TypesafeEnum
         enclosing_module.send(:remove_const, class_name)
       end
 
-      def define(key, name = nil)
+      def define(key, name = nil) # rubocop:disable
+        ensure_registries
+
+        instance = new(key, name, as_array.length)
+        key, name = valid_key_and_name(instance)
+
+        by_key[key] = instance
+        by_name[name] = instance
+        as_array << instance
+        const_set(key.to_s, instance)
+      end
+
+      def ensure_registries
         self.by_key ||= {}
         self.by_name ||= {}
         self.as_array ||= []
+      end
 
-        instance = new(key, name, as_array.length)
-        k = instance.key
-        n = instance.name
+      def valid_key_and_name(instance)
+        key = instance.key
+        name = instance.name
 
-        if self[k]
+        begin
+          fail NameError, "#{self.name}::#{key} already exists" if self[key]
+          fail NameError, "A #{self.name} instance with name '#{name}' already exists" if self[name]
+        rescue NameError
           undefine_class
-          fail NameError, "#{self.name}::#{k} already exists" if self[k]
+          raise
         end
 
-        if self[n]
-          undefine_class
-          fail NameError, "A #{self.name} instance with name '#{n}' already exists" if self[n]
-        end
-
-        by_key[k] = instance
-        by_name[n] = instance
-        as_array << instance
-        const_set(key.to_s, instance)
+        [key, name]
       end
 
     end
@@ -73,8 +85,8 @@ module TypesafeEnum
     attr_reader :name
     attr_reader :ordinal
 
-    def <=>(value)
-      ordinal <=> value.ordinal if self.class == value.class
+    def <=>(other)
+      ordinal <=> other.ordinal if self.class == other.class
     end
 
     def hash

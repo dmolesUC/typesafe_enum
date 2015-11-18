@@ -293,6 +293,30 @@ module TypesafeEnum
         expect(Suit[100]).to be_nil
       end
 
+      it 'supports enums with symbol names' do
+        class RGBColors < Base
+          define :RED, :red
+          define :GREEN, :green
+          define :BLUE, :blue
+        end
+
+        RGBColors.each do |c|
+          expect(RGBColors[c.name]).to be(c)
+        end
+      end
+
+      it 'supports enums with integer names' do
+        class Scale < Base
+          define :DECA, 10
+          define :HECTO, 100
+          define :KILO, 1_000
+          define :MEGA, 1_000_000
+        end
+
+        Scale.each do |c|
+          expect(Scale[c.name]).to be(c)
+        end
+      end
     end
 
     it 'supports case statements' do
