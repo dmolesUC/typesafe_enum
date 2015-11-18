@@ -48,7 +48,8 @@ module TypesafeEnum
         self.as_array ||= []
 
         instance = new(key, name, as_array.length)
-        k, n = instance.key, instance.name
+        k = instance.key
+        n = instance.name
 
         if self[k]
           undefine_class
@@ -63,7 +64,7 @@ module TypesafeEnum
         by_key[k] = instance
         by_name[n] = instance
         as_array << instance
-        self.const_set(key.to_s, instance)
+        const_set(key.to_s, instance)
       end
 
     end
@@ -73,22 +74,22 @@ module TypesafeEnum
     attr_reader :ordinal
 
     def <=>(value)
-      self.ordinal <=> value.ordinal if self.class == value.class
+      ordinal <=> value.ordinal if self.class == value.class
     end
 
     def hash
       @hash ||= begin
-                  result = 17
-                  result = 31 * result + self.class.hash
-                  result = 31 * result + self.key.hash
-                  result
+        result = 17
+        result = 31 * result + self.class.hash
+        result = 31 * result + key.hash
+        result
       end
     end
 
     private
 
     def initialize(key, name, ordinal)
-      raise TypeError, "#{key} is not a symbol" unless key.is_a?(Symbol)
+      fail TypeError, "#{key} is not a symbol" unless key.is_a?(Symbol)
       @key = key
       @name = name || key.to_s.downcase
       @ordinal = ordinal
