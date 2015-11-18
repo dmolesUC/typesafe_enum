@@ -13,6 +13,14 @@ module TypesafeEnum
         @@_by_name[lookup]
       end
 
+      def to_a
+        @@_as_array.dup
+      end
+
+      def length
+        @@_as_array.length
+      end
+
       private
 
       def undefine_class
@@ -37,6 +45,7 @@ module TypesafeEnum
 
         @@_by_key[k] = instance
         @@_by_name[n] = instance
+        @@_as_array << instance
         self.const_set(key.to_s, instance)
       end
 

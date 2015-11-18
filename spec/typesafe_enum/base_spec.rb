@@ -16,7 +16,7 @@ end
 
 module TypesafeEnum
   describe Base do
-    describe '#define' do
+    describe '::define' do
       it 'defines a constant enum value' do
         enum = Suit::CLUBS
         expect(enum).to be_a(Suit)
@@ -72,7 +72,7 @@ module TypesafeEnum
       end
     end
 
-    describe '#to_a' do
+    describe '::to_a' do
       it 'returns the values as an array' do
         expect(Suit.to_a).to eq([Suit::CLUBS, Suit::DIAMONDS, Suit::HEARTS, Suit::SPADES])
       end
@@ -84,13 +84,13 @@ module TypesafeEnum
       end
     end
 
-    describe '#length' do
+    describe '::length' do
       it 'returns the number of enum instnaces' do
         expect(Suit.length).to eq(4)
       end
     end
 
-    describe '#each' do
+    describe '::each' do
       it 'iterates the enum values' do
         expected = [Suit::CLUBS, Suit::DIAMONDS, Suit::HEARTS, Suit::SPADES]
         index = 0
@@ -101,7 +101,7 @@ module TypesafeEnum
       end
     end
 
-    describe '#each_with_index' do
+    describe '::each_with_index' do
       it 'iterates the enum values with indices' do
         expected = [Suit::CLUBS, Suit::DIAMONDS, Suit::HEARTS, Suit::SPADES]
         Suit.each_with_index do |s, index|
@@ -110,7 +110,7 @@ module TypesafeEnum
       end
     end
 
-    describe '<=>' do
+    describe '#<=>' do
       it 'orders enum instances' do
         Suit.each_with_index do |s1, i1|
           Suit.each_with_index do |s2, i2|
@@ -120,7 +120,7 @@ module TypesafeEnum
       end
     end
 
-    describe '==' do
+    describe '#==' do
       it 'returns true for identical instances, false otherwise' do
         Suit.each do |s1|
           Suit.each do |s2|
@@ -143,7 +143,7 @@ module TypesafeEnum
       end
     end
 
-    describe '!=' do
+    describe '#!=' do
       it 'returns false for identical instances, true otherwise' do
         Suit.each do |s1|
           Suit.each do |s2|
@@ -211,7 +211,7 @@ module TypesafeEnum
       end
     end
 
-    describe '#[]' do
+    describe '::[]' do
       it 'maps symbol keys to enum instances' do
         keys = [:CLUBS, :DIAMONDS, :HEARTS, :SPADES]
         expected = Suit.to_a
