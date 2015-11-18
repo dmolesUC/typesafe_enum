@@ -1,17 +1,17 @@
 require 'spec_helper'
 
 class Suit < TypesafeEnum::Base
-  define :CLUBS, 'Clubs'
-  define :DIAMONDS, 'Diamonds'
-  define :HEARTS, 'Hearts'
-  define :SPADES, 'Spades'
+  define :CLUBS
+  define :DIAMONDS
+  define :HEARTS
+  define :SPADES
 end
 
 class Tarot < TypesafeEnum::Base
-  define :CUPS
-  define :COINS
-  define :WANDS
-  define :SWORDS
+  define :CUPS, 'Cups'
+  define :COINS, 'Coins'
+  define :WANDS, 'Wands'
+  define :SWORDS, 'Swords'
 end
 
 module TypesafeEnum
@@ -62,10 +62,10 @@ module TypesafeEnum
       end
 
       it 'defaults the name to a lower-cased version of the symbol' do
-        expect(Tarot::CUPS.name).to eq('cups')
-        expect(Tarot::COINS.name).to eq('coins')
-        expect(Tarot::WANDS.name).to eq('wands')
-        expect(Tarot::SWORDS.name).to eq('swords')
+        expect(Suit::CLUBS.name).to eq('clubs')
+        expect(Suit::DIAMONDS.name).to eq('diamonds')
+        expect(Suit::HEARTS.name).to eq('hearts')
+        expect(Suit::SPADES.name).to eq('spades')
       end
 
       it 'is private' do
@@ -142,6 +142,15 @@ module TypesafeEnum
           end
         end
       end
+
+      it 'survives marshalling' do
+        Suit.each do |s1|
+          dump = Marshal.dump(s1)
+          s2 = Marshal.load(dump)
+          expect(s1 == s2).to eq(true)
+          expect(s2 == s1).to eq(true)
+        end
+      end
     end
 
     describe '#!=' do
@@ -172,6 +181,28 @@ module TypesafeEnum
           Suit.each do |s2|
             expect(s1.hash == s2.hash).to eq(s1 == s2)
           end
+        end
+      end
+
+      it 'returns different values for different types' do
+        class Suit2 < Base
+          define :CLUBS, 'Clubs'
+          define :DIAMONDS, 'Diamonds'
+          define :HEARTS, 'Hearts'
+          define :SPADES, 'Spades'
+        end
+
+        Suit.each do |s1|
+          s2 = Suit2[s1.key]
+          expect(s1.hash == s2.hash).to eq(false)
+        end
+      end
+
+      it 'survives marshalling' do
+        Suit.each do |s1|
+          dump = Marshal.dump(s1)
+          s2 = Marshal.load(dump)
+          expect(s2.hash).to eq(s1.hash)
         end
       end
     end

@@ -72,6 +72,15 @@ module TypesafeEnum
       self.ordinal <=> value.ordinal if self.class == value.class
     end
 
+    def hash
+      @hash ||= begin
+                  result = 17
+                  result = 31 * result + self.class.hash
+                  result = 31 * result + self.key.hash
+                  result
+      end
+    end
+
     private
 
     def initialize(key, name, ordinal)
