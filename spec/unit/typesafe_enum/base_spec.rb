@@ -15,13 +15,6 @@ class Tarot < TypesafeEnum::Base
   new :SWORDS, 'Swords'
 end
 
-# class Beatle < TypesafeEnum::Base
-#   new :CUPS, 'Cups', 0
-#   new :COINS, 'Coins', 1
-#   new :WANDS, 'Wands', 2
-#   new :SWORDS, 'Swords', 3
-# end
-
 module TypesafeEnum
   describe Base do
 
@@ -351,5 +344,21 @@ module TypesafeEnum
       expect(Suit.map { |s| pip(s) }).to eq(%w(♣ ♦ ♥ ♠))
     end
 
+    it 'supports "inner class" methods via instance_eval' do
+      class Operation < Base
+        new(:PLUS, '+').instance_eval do
+          def eval(x, y)
+            x + y
+          end
+        end
+        new(:MINUS, '-').instance_eval do
+          def eval(x, y)
+            x - y
+          end
+        end
+      end
+
+      expect(Operation.map { |op| op.eval(39, 23) }).to eq([39 + 23, 39 - 23])
+    end
   end
 end

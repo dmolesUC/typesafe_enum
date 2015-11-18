@@ -168,7 +168,31 @@ Suit.map(&:pip)
 
 ## Enum instances with methods
 
-*[TODO: simple syntax for adding methods to instances]*
+Enum instances can declare their own methods via `instance_eval`:
+
+```ruby
+class Operation < TypesafeEnum::Base
+  new(:PLUS, '+').instance_eval do
+    def eval(x, y)
+      x + y
+    end
+  end
+  new(:MINUS, '-').instance_eval do
+    def eval(x, y)
+      x - y
+    end
+  end
+end
+
+Operation::PLUS.eval(11, 17)
+# => 28
+
+Operation::MINUS.eval(28, 11)
+# => 17
+
+Operation.map { |op| op.eval(39, 23) }
+# => [62, 16]
+```
 
 ## How is this different from [Ruby::Enum](https://github.com/dblock/ruby-enum)?
 
