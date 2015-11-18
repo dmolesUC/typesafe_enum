@@ -95,12 +95,12 @@ Tarot.to_a
 # => [#<Tarot:0x007fd4db30eca8 @key=:CUPS, @name="Cups", @ord=0>, #<Tarot:0x007fd4db30ebe0 @key=:COINS, @name="Coins", @ord=1>, #<Tarot:0x007fd4db30eaf0 @key=:WANDS, @name="Wands", @ord=2>, #<Tarot:0x007fd4db30e9b0 @key=:SWORDS, @name="Swords", @ord=3>]
 ```
 
-### `::length`
+### `::size`
 
 Returns the number of enum instances:
 
 ```ruby
-Suit.length
+Suit.size
 # => 4
 ```
 
@@ -233,11 +233,29 @@ Tarot::CUPS == 'Cups'
 
 *[TODO: details]*
 
-- Clunkier syntax
-- No special `switch`/`case` support
-- No serialization support
+### Clunkier syntax
+
+### No special `switch`/`case` support
+
+### No serialization support
+
   - but `#==`, `#hash` etc. are `Marshal`-safe
-- No support classes like [`EnumSet`](http://docs.oracle.com/javase/8/docs/api/java/util/EnumSet.html) and
+
+### No support classes like [`EnumSet`](http://docs.oracle.com/javase/8/docs/api/java/util/EnumSet.html) and
   [`EnumMap`](http://docs.oracle.com/javase/8/docs/api/java/util/EnumMap.html)
-- Enum classes are not closed
-- *[Other limitations...]*
+
+### Enum classes are not closed
+
+It's Ruby, so even though `:new` is private to each enum class, you
+can always work around that:
+
+```ruby
+Suit.send(:new, :JOKERS)
+# => #<Suit:0x007fc9e44e4778 @key=:JOKERS, @name="jokers", @ord=4>
+Suit.map(&:key)
+# => [:CLUBS, :DIAMONDS, :HEARTS, :SPADES, :JOKERS]
+Suit.size
+# => 5
+```
+
+### *[Other limitations...]*
