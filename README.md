@@ -7,7 +7,7 @@
 
 A Ruby implementation of Joshua Bloch's
 [typesafe enum pattern](http://www.oracle.com/technetwork/java/page1-139488.html#replaceenums),
-with syntax inspired by [Ruby::Enum](https://github.com/dblock/ruby-enum).
+with syntax loosely inspired by [Ruby::Enum](https://github.com/dblock/ruby-enum).
 
 ## Basic usage
 
