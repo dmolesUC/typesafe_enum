@@ -201,7 +201,7 @@ module TypesafeEnum
         end
 
         Suit.each do |s1|
-          s2 = Suit2[s1.key]
+          s2 = Suit2.find_by_key(s1.key)
           expect(s1.hash == s2.hash).to eq(false)
         end
       end
@@ -251,46 +251,31 @@ module TypesafeEnum
       end
     end
 
-    describe '::[]' do
+    describe '::find_by_key' do
       it 'maps symbol keys to enum instances' do
         keys = [:CLUBS, :DIAMONDS, :HEARTS, :SPADES]
         expected = Suit.to_a
         keys.each_with_index do |k, index|
-          expect(Suit[k]).to be(expected[index])
-        end
-      end
-
-      it 'maps names to enum instances' do
-        names = %w(clubs diamonds hearts spades)
-        expected = Suit.to_a
-        names.each_with_index do |n, index|
-          expect(Suit[n]).to be(expected[index])
-        end
-      end
-
-      it 'maps ordinal indices to enum instances' do
-        Suit.each do |s|
-          expect(Suit[s.ordinal]).to be(s)
-        end
-      end
-
-      it 'supports negative indices' do
-        Suit.each_with_index do |s, index|
-          negative_index = index - Suit.length
-          expect(Suit[negative_index]).to be(s)
+          expect(Suit.find_by_key(k)).to be(expected[index])
         end
       end
 
       it 'returns nil for invalid keys' do
-        expect(Suit[:WANDS]).to be_nil
+        expect(Suit.find_by_key(:WANDS)).to be_nil
+      end
+    end
+
+    describe '::find_by_name' do
+      it 'maps names to enum instances' do
+        names = %w(clubs diamonds hearts spades)
+        expected = Suit.to_a
+        names.each_with_index do |n, index|
+          expect(Suit.find_by_name(n)).to be(expected[index])
+        end
       end
 
       it 'returns nil for invalid names' do
-        expect(Suit['wands']).to be_nil
-      end
-
-      it 'returns nil for invalid indices' do
-        expect(Suit[100]).to be_nil
+        expect(Suit.find_by_name('wands')).to be_nil
       end
 
       it 'supports enums with symbol names' do
@@ -301,7 +286,7 @@ module TypesafeEnum
         end
 
         RGBColors.each do |c|
-          expect(RGBColors[c.name]).to be(c)
+          expect(RGBColors.find_by_name(c.name)).to be(c)
         end
       end
 
@@ -313,9 +298,29 @@ module TypesafeEnum
           define :MEGA, 1_000_000
         end
 
-        Scale.each do |c|
-          expect(Scale[c.name]).to be(c)
+        Scale.each do |s|
+          expect(Scale.find_by_name(s.name)).to be(s)
         end
+      end
+    end
+
+    describe '::find_by_ordinal' do
+
+      it 'maps ordial indices to enum instances' do
+        Suit.each do |s|
+          expect(Suit.find_by_ordinal(s.ordinal)).to be(s)
+        end
+      end
+
+      it 'supports negative indices' do
+        Suit.each_with_index do |s, index|
+          negative_index = index - Suit.length
+          expect(Suit.find_by_ordinal(negative_index)).to be(s)
+        end
+      end
+
+      it 'returns nil for invalid indices' do
+        expect(Suit.find_by_ordinal(100)).to be_nil
       end
     end
 

@@ -4,16 +4,6 @@ module TypesafeEnum
 
     class << self
 
-      def [](lookup)
-        result = by_key[lookup]
-        return result if result
-
-        result = by_name[lookup]
-        return result if result
-
-        as_array[lookup] if lookup.is_a?(Integer)
-      end
-
       def to_a
         as_array.dup
       end
@@ -32,6 +22,18 @@ module TypesafeEnum
 
       def map(&block)
         to_a.map(&block)
+      end
+
+      def find_by_key(key)
+        by_key[key]
+      end
+
+      def find_by_name(name)
+        by_name[name]
+      end
+
+      def find_by_ordinal(ordinal)
+        as_array[ordinal]
       end
 
       private
@@ -69,11 +71,11 @@ module TypesafeEnum
         name = instance.name
 
         begin
-          fail NameError, "#{self.name}::#{key} already exists" if self[key]
-          fail NameError, "A #{self.name} instance with name '#{name}' already exists" if self[name]
-        rescue NameError
+          fail NameError, "#{self.name}::#{key} already exists" if find_by_key(key)
+          fail NameError, "A #{self.name} instance with name '#{name}' already exists" if find_by_name(name)
+        rescue NameError => e
           undefine_class
-          raise
+          raise e
         end
 
         [key, name]

@@ -55,6 +55,20 @@ Tarot::CUPS.name
 # => 'Cups'
 ```
 
+And `names` need not be strings:
+
+```ruby
+class Scale < TypesafeEnum::Base
+  define :DECA, 10
+  define :HECTO, 100
+  define :KILO, 1_000
+  define :MEGA, 1_000_000
+end
+
+Scale::KILO.name
+# => 1000
+```
+
 Enum instances have an `ordinal` value corresponding to their declaration
 order:
 
@@ -111,45 +125,18 @@ Suit.map(&:name)
 # => ["clubs", "diamonds", "hearts", "spades"]
 ```
 
-### ::[]
+### `::find_by_key`, `::find_by_name`, `::find_by_ordinal`
 
-Looks up an enum instance based on its key, name, or ordinal:
+Look up an enum instance based on its key, name, or ordinal:
 
 ```ruby
-Tarot[:CUPS]
+Tarot.find_by_key(:CUPS)
 # => #<Tarot:0x007faab19fda40 @key=:CUPS, @name="Cups", @ordinal=0>
-Tarot['Wands']
+Tarot.find_by_name('Wands')
 # => #<Tarot:0x007faab19fd8b0 @key=:WANDS, @name="Wands", @ordinal=2>
-Tarot[3]
+Tarot.find_by_ordinal(3)
 # => #<Tarot:0x007faab19fd810 @key=:SWORDS, @name="Swords", @ordinal=3>
 ```
-
-It even works with symbols or integers used as names:
-
-```ruby
-class RGBColors < TypesafeEnum::Base
-  define :RED, :red
-  define :GREEN, :green
-  define :BLUE, :blue
-end
-
-RGBColors[:red]
-# => #<RGBColors:0x007fac42140eb0 @key=:RED, @name=:red, @ordinal=0>
-
-class Scale < TypesafeEnum::Base
-  define :DECA, 10
-  define :HECTO, 100
-  define :KILO, 1_000
-  define :MEGA, 1_000_000
-end
-
-Scale[1000]
-# => #<Scale:0x007fac420faed8 @key=:KILO, @name=1000, @ordinal=2>
-```
-
-Note though that if you reuse the same symbols for names and keys,
-or use integer keys in the range `0..length`, the behavior of `#[]`
-is undefined.
 
 ## Enum classes with methods
 
