@@ -17,10 +17,10 @@ Create a new enum class and a set of instances:
 require 'typesafe_enum'
 
 class Suit < TypesafeEnum::Base
-  define :CLUBS
-  define :DIAMONDS
-  define :HEARTS
-  define :SPADES
+  new :CLUBS
+  new :DIAMONDS
+  new :HEARTS
+  new :SPADES
 end
 ```
 
@@ -41,14 +41,14 @@ Suit::CLUBS.name
 # => 'clubs'
 ```
 
-But you can also define an explicit `name`:
+But you can also new an explicit `name`:
 
 ```ruby
 class Tarot < TypesafeEnum::Base
-  define :CUPS, 'Cups'
-  define :COINS, 'Coins'
-  define :WANDS, 'Wands'
-  define :SWORDS, 'Swords'
+  new :CUPS, 'Cups'
+  new :COINS, 'Coins'
+  new :WANDS, 'Wands'
+  new :SWORDS, 'Swords'
 end
 
 Tarot::CUPS.name
@@ -59,10 +59,10 @@ And `names` need not be strings:
 
 ```ruby
 class Scale < TypesafeEnum::Base
-  define :DECA, 10
-  define :HECTO, 100
-  define :KILO, 1_000
-  define :MEGA, 1_000_000
+  new :DECA, 10
+  new :HECTO, 100
+  new :KILO, 1_000
+  new :MEGA, 1_000_000
 end
 
 Scale::KILO.name
@@ -144,10 +144,10 @@ Enum classes can have methods, and other non-enum constants:
 
 ```ruby
 class Suit < TypesafeEnum::Base
-  define :CLUBS
-  define :DIAMONDS
-  define :HEARTS
-  define :SPADES
+  new :CLUBS
+  new :DIAMONDS
+  new :HEARTS
+  new :SPADES
 
   ALL_PIPS = %w(♣ ♦ ♥ ♠)
 
@@ -190,8 +190,8 @@ strings, but they can be of any type.
 class Foo
   include Ruby::Enum
 
-  define :BAR, 'bar'
-  define :BAZ, 'baz'
+  new :BAR, 'bar'
+  new :BAZ, 'baz'
 end
 
 Foo::BAR
@@ -203,8 +203,8 @@ Foo::BAR == 'bar'
 class Bar
   include Ruby::Enum
 
-  define :BAR, 1
-  define :BAZ, 2
+  new :BAR, 1
+  new :BAZ, 2
 end
 
 Bar::BAR
@@ -217,9 +217,9 @@ Java introduced the concept of "typesafe enums", first as a
 [design pattern]((http://www.oracle.com/technetwork/java/page1-139488.html#replaceenums))
 and later as a
 [first-class language construct](https://docs.oracle.com/javase/1.5.0/docs/guide/language/enums.html).
-In Java, an `Enum` class defines a closed, named set of _instances of that class,_ rather than
+In Java, an `Enum` class news a closed, named set of _instances of that class,_ rather than
 of a primitive type such as an `int`, and those instances have all the features of other objects,
-such as methods, fields, and type membership. Likewise, a `TypesafeEnum` class defines a named set
+such as methods, fields, and type membership. Likewise, a `TypesafeEnum` class news a named set
 of instances of that class, rather than of a set of some other type.
 
 ```ruby
@@ -236,7 +236,7 @@ Tarot::CUPS == 'Cups'
 - Clunkier syntax
 - No special `switch`/`case` support
 - No serialization support
-  - but
+  - but `#==`, `#hash` etc. are `Marshal`-safe
 - No support classes like [`EnumSet`](http://docs.oracle.com/javase/8/docs/api/java/util/EnumSet.html) and
   [`EnumMap`](http://docs.oracle.com/javase/8/docs/api/java/util/EnumMap.html)
 - Enum classes are not closed

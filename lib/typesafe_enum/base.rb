@@ -9,7 +9,7 @@ module TypesafeEnum
       end
 
       def size
-        as_array.length
+        as_array ? as_array.length : 0
       end
 
       def each(&block)
@@ -49,10 +49,8 @@ module TypesafeEnum
         enclosing_module.send(:remove_const, class_name)
       end
 
-      def define(key, name = nil) # rubocop:disable
+      def register(instance)
         ensure_registries
-
-        instance = new(key, name, size)
         key, name = valid_key_and_name(instance)
 
         by_key[key] = instance
@@ -103,12 +101,17 @@ module TypesafeEnum
 
     private
 
-    def initialize(key, name, ord)
+    def initialize(key, name = nil)
       fail TypeError, "#{key} is not a symbol" unless key.is_a?(Symbol)
       @key = key
       @name = name || key.to_s.downcase
-      @ord = ord
+      @ord = self.class.size
+      self.class.class_exec(self) do |instance|
+        register(instance)
+      end
     end
+
+    private_class_method :new
 
   end
 end

@@ -2,24 +2,31 @@
 require 'spec_helper'
 
 class Suit < TypesafeEnum::Base
-  define :CLUBS
-  define :DIAMONDS
-  define :HEARTS
-  define :SPADES
+  new :CLUBS
+  new :DIAMONDS
+  new :HEARTS
+  new :SPADES
 end
 
 class Tarot < TypesafeEnum::Base
-  define :CUPS, 'Cups'
-  define :COINS, 'Coins'
-  define :WANDS, 'Wands'
-  define :SWORDS, 'Swords'
+  new :CUPS, 'Cups'
+  new :COINS, 'Coins'
+  new :WANDS, 'Wands'
+  new :SWORDS, 'Swords'
 end
+
+# class Beatle < TypesafeEnum::Base
+#   new :CUPS, 'Cups', 0
+#   new :COINS, 'Coins', 1
+#   new :WANDS, 'Wands', 2
+#   new :SWORDS, 'Swords', 3
+# end
 
 module TypesafeEnum
   describe Base do
 
-    describe '::define' do
-      it 'defines a constant enum value' do
+    describe ':: new' do
+      it ' news a constant enum value' do
         enum = Suit::CLUBS
         expect(enum).to be_a(Suit)
       end
@@ -27,7 +34,7 @@ module TypesafeEnum
       it 'insists symbols be symbols' do
         expect do
           class Cheat < Base
-            define 'spades', 'spades'
+            new 'spades', 'spades'
           end
         end.to raise_error(TypeError)
       end
@@ -35,7 +42,7 @@ module TypesafeEnum
       it 'insists symbols be uppercase' do
         expect do
           class Cheat < Base
-            define :spades, 'spades'
+            new :spades, 'spades'
           end
         end.to raise_error(NameError)
       end
@@ -43,8 +50,8 @@ module TypesafeEnum
       it 'disallows duplicate symbols' do
         expect do
           class Cheat < Base
-            define :SPADES, 'spades'
-            define :SPADES, 'more spades'
+            new :SPADES, 'spades'
+            new :SPADES, 'more spades'
           end
         end.to raise_error(NameError)
 
@@ -54,8 +61,8 @@ module TypesafeEnum
       it 'disallows duplicate names' do
         expect do
           class Cheat < Base
-            define :SPADES, 'spades'
-            define :ALSO_SPADES, 'spades'
+            new :SPADES, 'spades'
+            new :ALSO_SPADES, 'spades'
           end
         end.to raise_error(NameError)
 
@@ -70,7 +77,7 @@ module TypesafeEnum
       end
 
       it 'is private' do
-        expect { Tarot.define(:PENTACLES) }.to raise_error(NoMethodError)
+        expect { Tarot.new(:PENTACLES) }.to raise_error(NoMethodError)
       end
     end
 
@@ -194,10 +201,10 @@ module TypesafeEnum
 
       it 'returns different values for different types' do
         class Suit2 < Base
-          define :CLUBS, 'Clubs'
-          define :DIAMONDS, 'Diamonds'
-          define :HEARTS, 'Hearts'
-          define :SPADES, 'Spades'
+          new :CLUBS, 'Clubs'
+          new :DIAMONDS, 'Diamonds'
+          new :HEARTS, 'Hearts'
+          new :SPADES, 'Spades'
         end
 
         Suit.each do |s1|
@@ -280,9 +287,9 @@ module TypesafeEnum
 
       it 'supports enums with symbol names' do
         class RGBColors < Base
-          define :RED, :red
-          define :GREEN, :green
-          define :BLUE, :blue
+          new :RED, :red
+          new :GREEN, :green
+          new :BLUE, :blue
         end
 
         RGBColors.each do |c|
@@ -292,10 +299,10 @@ module TypesafeEnum
 
       it 'supports enums with integer names' do
         class Scale < Base
-          define :DECA, 10
-          define :HECTO, 100
-          define :KILO, 1_000
-          define :MEGA, 1_000_000
+          new :DECA, 10
+          new :HECTO, 100
+          new :KILO, 1_000
+          new :MEGA, 1_000_000
         end
 
         Scale.each do |s|
