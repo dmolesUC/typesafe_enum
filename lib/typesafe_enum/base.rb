@@ -81,7 +81,7 @@ module TypesafeEnum
       @hash ||= begin
         result = 17
         result = 31 * result + self.class.hash
-        result = 31 * result + key.hash
+        result = 31 * result + ordinal
         result
       end
     end
