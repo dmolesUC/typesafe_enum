@@ -1,3 +1,4 @@
+# coding: UTF-8
 require 'spec_helper'
 
 class Suit < TypesafeEnum::Base
@@ -69,7 +70,7 @@ module TypesafeEnum
       end
 
       it 'is private' do
-        expect{Tarot.define(:PENTACLES)}.to raise_error(NoMethodError)
+        expect { Tarot.define(:PENTACLES) }.to raise_error(NoMethodError)
       end
     end
 
@@ -113,7 +114,7 @@ module TypesafeEnum
 
     describe '::map' do
       it 'maps enum values' do
-        all_keys = Suit.map { |s| s.key }
+        all_keys = Suit.map(&:key)
         expect(all_keys).to eq([:CLUBS, :DIAMONDS, :HEARTS, :SPADES])
       end
     end
@@ -292,6 +293,25 @@ module TypesafeEnum
         expect(Suit[100]).to be_nil
       end
 
+    end
+
+    it 'supports case statements' do
+      def pip(suit)
+        case suit
+        when Suit::CLUBS
+          '♣'
+        when Suit::DIAMONDS
+          '♦'
+        when Suit::HEARTS
+          '♥'
+        when Suit::SPADES
+          '♠'
+        else
+          fail "unknown suit: #{self}"
+        end
+      end
+
+      expect(Suit.map { |s| pip(s) }).to eq(%w(♣ ♦ ♥ ♠))
     end
 
   end
