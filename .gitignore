@@ -15,6 +15,9 @@
 *.a
 mkmf.log
 
+# Build output
+*.gem
+
 # Database
 
 db/*.sqlite3
