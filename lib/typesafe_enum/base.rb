@@ -26,6 +26,10 @@ module TypesafeEnum
         to_a.each_with_index(&block)
       end
 
+      def map(&block)
+        to_a.map(&block)
+      end
+
       private
 
       attr_accessor :by_key

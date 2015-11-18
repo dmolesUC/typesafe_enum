@@ -111,6 +111,13 @@ module TypesafeEnum
       end
     end
 
+    describe '::map' do
+      it 'maps enum values' do
+        all_keys = Suit.map { |s| s.key }
+        expect(all_keys).to eq([:CLUBS, :DIAMONDS, :HEARTS, :SPADES])
+      end
+    end
+
     describe '#<=>' do
       it 'orders enum instances' do
         Suit.each_with_index do |s1, i1|
@@ -219,7 +226,7 @@ module TypesafeEnum
 
     describe '#name' do
       it 'returns the string name of the enum instance' do
-        expected = %w(Clubs Diamonds Hearts Spades)
+        expected = %w(clubs diamonds hearts spades)
         Suit.each_with_index do |s, index|
           expect(s.name).to eq(expected[index])
         end
@@ -253,7 +260,7 @@ module TypesafeEnum
       end
 
       it 'maps names to enum instances' do
-        names = %w(Clubs Diamonds Hearts Spades)
+        names = %w(clubs diamonds hearts spades)
         expected = Suit.to_a
         names.each_with_index do |n, index|
           expect(Suit[n]).to be(expected[index])
