@@ -42,6 +42,14 @@ module TypesafeEnum
         by_value[value]
       end
 
+      # Looks up an enum instance based on the string representation of its value
+      def find_by_value_str(value_str)
+        value_str = value_str.to_s
+        by_value.each do |value, instance|
+          return instance if value_str == value.to_s
+        end
+      end
+
       # Looks up an enum instance based on its ordinal
       def find_by_ord(ord)
         return nil if ord < 0 || ord > size

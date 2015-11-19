@@ -15,6 +15,19 @@ class Tarot < TypesafeEnum::Base
   new :SWORDS, 'Swords'
 end
 
+class RGBColor < TypesafeEnum::Base
+  new :RED, :red
+  new :GREEN, :green
+  new :BLUE, :blue
+end
+
+class Scale < TypesafeEnum::Base
+  new :DECA, 10
+  new :HECTO, 100
+  new :KILO, 1_000
+  new :MEGA, 1_000_000
+end
+
 module TypesafeEnum
   describe Base do
 
@@ -285,27 +298,40 @@ module TypesafeEnum
       end
 
       it 'supports enums with symbol values' do
-        class RGBColors < Base
-          new :RED, :red
-          new :GREEN, :green
-          new :BLUE, :blue
-        end
-
-        RGBColors.each do |c|
-          expect(RGBColors.find_by_value(c.value)).to be(c)
+        RGBColor.each do |c|
+          expect(RGBColor.find_by_value(c.value)).to be(c)
         end
       end
 
       it 'supports enums with integer values' do
-        class Scale < Base
-          new :DECA, 10
-          new :HECTO, 100
-          new :KILO, 1_000
-          new :MEGA, 1_000_000
-        end
-
         Scale.each do |s|
           expect(Scale.find_by_value(s.value)).to be(s)
+        end
+      end
+    end
+
+    describe '::find_by_value_str' do
+      it 'maps string values to enum instances' do
+        values = %w(clubs diamonds hearts spades)
+        expected = Suit.to_a
+        values.each_with_index do |n, index|
+          expect(Suit.find_by_value_str(n)).to be(expected[index])
+        end
+      end
+
+      it 'returns nil for invalid values' do
+        expect(Suit.find_by_value_str('wands')).to be_nil
+      end
+
+      it 'supports enums with symbol values' do
+        RGBColor.each do |c|
+          expect(RGBColor.find_by_value_str(c.value.to_s)).to be(c)
+        end
+      end
+
+      it 'supports enums with integer values' do
+        Scale.each do |s|
+          expect(Scale.find_by_value_str(s.value.to_s)).to be(s)
         end
       end
     end

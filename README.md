@@ -144,6 +144,19 @@ Tarot.find_by_ord(3)
 # => #<Tarot:0x007faab19fd810 @key=:SWORDS, @value="Swords", @ord=3>
 ```
 
+### `::find_by_value_str`
+
+Look up an enum instance based on the string form of its value (as returned by `to_s`) --
+useful for, e.g., XML or JSON mapping of enums with non-string values:
+
+```ruby
+Scale.find_by_value_str('1000000')
+# => #<Scale:0x007f8513a93810 @key=:MEGA, @value=1000000, @ord=3>
+```
+
+(Note that unlike the other `::find_by…` methods, which use hash lookups, `::find_by_value_str`
+is linear in the number of enum values, so it's best suited for smaller enumerations.)
+
 ## Enum classes with methods
 
 Enum classes can have methods, and other non-enum constants:
@@ -259,14 +272,35 @@ Tarot::CUPS == 'Cups'
 # => false
 ```
 
-## Differences / limitations vs. `java.lang.Enum`
+## How is this different from `java.lang.Enum`?
 
 ### Clunkier syntax
 
 In Java 5+, you can define an enum in one line and instance-specific methods with a pair of braces.
-With `TypesafeEnum`, you need at minimum one `new` per instance (on separate lines unless you're using
-semicolons, which Ruby allows but frowns upon), and instance-specific methods require extra parentheses
-and `instance_eval`.
+
+```java
+enum CMYKColor {
+  CYAN, MAGENTA, YELLOW, BLACK
+}
+
+enum Suit {
+  CLUBS    { char pip() { return '♣'; } },
+  DIAMONDS { char pip() { return '♦'; } },
+  HEARTS   { char pip() { return '♥'; } },
+  SPADES   { char pip() { return '♠'; } };
+
+  abstract char pip();
+}
+```
+
+With `TypesafeEnum`, instance-specific methods require extra parentheses and `instance_eval`,
+as shown above, and about the best you can do even for simple enums is something like:
+
+```ruby
+class CMYKColor < TypesafeEnum::Base
+  [:CYAN, :MAGENTA, :YELLOW, :BLACK].each { |c| new c }
+end
+```
 
 ### No special `switch`/`case` support
 
@@ -312,15 +346,22 @@ high-performance, optimized versions of its collection interfaces. `TypesafeEnum
 ### Enum classes are not closed
 
 It's Ruby, so even though `:new` is private to each enum class, you
-can always work around that:
+can work around that in various ways:
 
 ```ruby
 Suit.send(:new, :JOKERS)
 # => #<Suit:0x007fc9e44e4778 @key=:JOKERS, @value="jokers", @ord=4>
+
+class Tarot
+  new :MAJOR_ARCANA, 'Major Arcana'
+end
+# => #<Tarot:0x007f8513b39b20 @key=:MAJOR_ARCANA, @value="Major Arcana", @ord=4>
+
 Suit.map(&:key)
 # => [:CLUBS, :DIAMONDS, :HEARTS, :SPADES, :JOKERS]
-Suit.size
-# => 5
+
+Tarot.map(&:key)
+# => [:CUPS, :COINS, :WANDS, :SWORDS, :MAJOR_ARCANA]
 ```
 
 ## Contributing
