@@ -259,20 +259,55 @@ Tarot::CUPS == 'Cups'
 # => false
 ```
 
-## How is this different from [java.lang.Enum](http://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html)?
-
-*[TODO: details]*
+## Differences / limitations vs. `java.lang.Enum`
 
 ### Clunkier syntax
 
+In Java 5+, you can define an enum in one line and instance-specific methods with a pair of braces.
+With `TypesafeEnum`, you need at minimum one `new` per instance (on separate lines unless you're using
+semicolons, which Ruby allows but frowns upon), and instance-specific methods require extra parentheses
+and `instance_eval`.
+
 ### No special `switch`/`case` support
+
+The Java compiler will warn you if a `switch` statement doesn't include all instances of a Java enum.
+Ruby doesn't care whether you cover all instances of a `TypesafeEnum`, and in fact it doesn't care if
+your `when` statements include a mix of enum instances of different classes, or of enum instances and
+other things. (In some respects this latter is a feature, of course.)
 
 ### No serialization support
 
-  - but `#==`, `#hash` etc. are `Marshal`-safe
+The Java `Enum` class has special code to ensure that enum instances are deserialized to the existing
+singleton constants. This can be done with Ruby [`Marshal`](http://ruby-doc.org/core-2.2.3/Marshal.html)
+(by defining `marshal_load`) but it didn't seem worth the trouble, so a deserialized `TypesafeEnum` will
+not be identical to the original:
 
-### No support classes like [`EnumSet`](http://docs.oracle.com/javase/8/docs/api/java/util/EnumSet.html) and
-  [`EnumMap`](http://docs.oracle.com/javase/8/docs/api/java/util/EnumMap.html)
+```ruby
+clubs2 = Marshal.load(Marshal.dump(Suit::CLUBS))
+Suit::CLUBS.equal?(clubs2)
+# => false
+```
+
+However, `#==`, `#hash`, etc. are `Marshal`-safe:
+
+```ruby
+Suit::CLUBS == clubs2
+# => true
+clubs2 == Suit::CLUBS
+# => true
+Suit::CLUBS.hash == clubs2.hash
+# => true
+```
+
+If this isn't enough, and the lack of object identity across marshalling is a problem, it could be added
+in a later version. (Pull requests welcome!)
+
+### No support classes
+
+Java has `Enum`-specific classes like
+[`EnumSet`](http://docs.oracle.com/javase/8/docs/api/java/util/EnumSet.html) and
+[`EnumMap`](http://docs.oracle.com/javase/8/docs/api/java/util/EnumMap.html) that provide special
+high-performance, optimized versions of its collection interfaces. `TypesafeEnum` doesn't.
 
 ### Enum classes are not closed
 
@@ -288,4 +323,7 @@ Suit.size
 # => 5
 ```
 
-### *[Other limitations...]*
+## Contributing
+
+Pull requests are welcome, but please make sure the tests pass, the code has 100% coverage, and the
+code style passes Rubocop. (The default rake task should check all of these for you.)
