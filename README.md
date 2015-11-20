@@ -24,8 +24,8 @@ class Suit < TypesafeEnum::Base
 end
 ```
 
-A constant is declared for each instance, with the key symbol as its
-value:
+A constant is declared for each instance, with an instance of the new
+class as the value of that constant:
 
 ```ruby
 Suit::CLUBS
@@ -159,7 +159,9 @@ is linear in the number of enum values, so it's best suited for smaller enumerat
 
 ## Enum classes with methods
 
-Enum classes can have methods, and other non-enum constants:
+Enum classes are just classes. They can have methods, and other non-enum constants.
+(The `:initialize` method for each class, though, is declared programmatically by
+the base class. If you need to redefine it, be sure to alias and call the original.)
 
 ```ruby
 class Suit < TypesafeEnum::Base
@@ -220,11 +222,11 @@ Operation.map { |op| op.eval(39, 23) }
 as seen in C, [C++](https://msdn.microsoft.com/en-us/library/2dzy4k6e.aspx),
 [C#](https://msdn.microsoft.com/en-us/library/sbbt4032.aspx), and
 [Objective-C](https://developer.apple.com/library/ios/releasenotes/ObjectiveC/ModernizationObjC/AdoptingModernObjective-C/AdoptingModernObjective-C.html#//apple_ref/doc/uid/TP40014150-CH1-SW6).
-In C and most C-like languages, an `enum` is simply a valued set of `int` values
+In C and most C-like languages, an `enum` is simply a named set of `int` values
 (though C++ and others require an explicit cast to assign an `enum` value to
 an `int` variable).
 
-Similarly, a `Ruby::Enum` class is simply a valued set of values of any type,
+Similarly, a `Ruby::Enum` class is simply a named set of values of any type,
 with convenience methods for iterating over the set. Usually the values are
 strings, but they can be of any type.
 
@@ -260,9 +262,9 @@ Java introduced the concept of "typesafe enums", first as a
 [design pattern]((http://www.oracle.com/technetwork/java/page1-139488.html#replaceenums))
 and later as a
 [first-class language construct](https://docs.oracle.com/javase/1.5.0/docs/guide/language/enums.html).
-In Java, an `Enum` class news a closed, valued set of _instances of that class,_ rather than
+In Java, an `Enum` class defines a closed, valued set of _instances of that class,_ rather than
 of a primitive type such as an `int`, and those instances have all the features of other objects,
-such as methods, fields, and type membership. Likewise, a `TypesafeEnum` class news a valued set
+such as methods, fields, and type membership. Likewise, a `TypesafeEnum` class defines a valued set
 of instances of that class, rather than of a set of some other type.
 
 ```ruby
