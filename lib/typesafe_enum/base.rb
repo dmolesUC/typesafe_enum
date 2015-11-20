@@ -126,13 +126,14 @@ module TypesafeEnum
 
     private
 
-    def initialize(key, value = nil)
+    def initialize(key, value = nil, &block)
       fail TypeError, "#{key} is not a symbol" unless key.is_a?(Symbol)
       @key = key
       @value = value || key.to_s.downcase
       @ord = self.class.size
       self.class.class_exec(self) do |instance|
         register(instance)
+        instance.instance_eval(&block) if block_given?
       end
     end
 

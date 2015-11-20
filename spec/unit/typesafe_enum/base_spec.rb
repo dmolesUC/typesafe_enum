@@ -337,7 +337,6 @@ module TypesafeEnum
     end
 
     describe '::find_by_ord' do
-
       it 'maps ordinal indices to enum instances' do
         Suit.each do |s|
           expect(Suit.find_by_ord(s.ord)).to be(s)
@@ -376,14 +375,14 @@ module TypesafeEnum
       expect(Suit.map { |s| pip(s) }).to eq(%w(♣ ♦ ♥ ♠))
     end
 
-    it 'supports "inner class" methods via instance_eval' do
+    it 'supports "inner class" methods' do
       class Operation < Base
-        new(:PLUS, '+').instance_eval do
+        new(:PLUS, '+') do
           def eval(x, y)
             x + y
           end
         end
-        new(:MINUS, '-').instance_eval do
+        new(:MINUS, '-') do
           def eval(x, y)
             x - y
           end

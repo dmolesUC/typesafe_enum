@@ -189,16 +189,16 @@ Suit.map(&:pip)
 
 ## Enum instances with methods
 
-Enum instances can declare their own methods via `instance_eval`:
+Enum instances can declare their own methods:
 
 ```ruby
 class Operation < TypesafeEnum::Base
-  new(:PLUS, '+').instance_eval do
+  new(:PLUS, '+') do
     def eval(x, y)
       x + y
     end
   end
-  new(:MINUS, '-').instance_eval do
+  new(:MINUS, '-') do
     def eval(x, y)
       x - y
     end
@@ -295,7 +295,7 @@ enum Suit {
 }
 ```
 
-With `TypesafeEnum`, instance-specific methods require extra parentheses and `instance_eval`,
+With `TypesafeEnum`, instance-specific methods require extra parentheses,
 as shown above, and about the best you can do even for simple enums is something like:
 
 ```ruby
