@@ -48,6 +48,7 @@ module TypesafeEnum
         by_value.each do |value, instance|
           return instance if value_str == value.to_s
         end
+        nil
       end
 
       # Looks up an enum instance based on its ordinal
