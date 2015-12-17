@@ -1,27 +1,27 @@
 # coding: UTF-8
 require 'spec_helper'
 
-class Suit < TypesafeEnum::Base
+class ::Suit < TypesafeEnum::Base
   new :CLUBS
   new :DIAMONDS
   new :HEARTS
   new :SPADES
 end
 
-class Tarot < TypesafeEnum::Base
+class ::Tarot < TypesafeEnum::Base
   new :CUPS, 'Cups'
   new :COINS, 'Coins'
   new :WANDS, 'Wands'
   new :SWORDS, 'Swords'
 end
 
-class RGBColor < TypesafeEnum::Base
+class ::RGBColor < TypesafeEnum::Base
   new :RED, :red
   new :GREEN, :green
   new :BLUE, :blue
 end
 
-class Scale < TypesafeEnum::Base
+class ::Scale < TypesafeEnum::Base
   new :DECA, 10
   new :HECTO, 100
   new :KILO, 1_000
@@ -31,7 +31,7 @@ end
 module TypesafeEnum
   describe Base do
 
-    describe ':: new' do
+    describe '::new' do
       it ' news a constant enum value' do
         enum = Suit::CLUBS
         expect(enum).to be_a(Suit)
@@ -39,7 +39,7 @@ module TypesafeEnum
 
       it 'insists symbols be symbols' do
         expect do
-          class Cheat < Base
+          class ::Cheat < Base
             new 'spades', 'spades'
           end
         end.to raise_error(TypeError)
@@ -47,7 +47,7 @@ module TypesafeEnum
 
       it 'insists symbols be uppercase' do
         expect do
-          class Cheat < Base
+          class ::Cheat < Base
             new :spades, 'spades'
           end
         end.to raise_error(NameError)
@@ -55,24 +55,24 @@ module TypesafeEnum
 
       it 'disallows duplicate symbols' do
         expect do
-          class Cheat < Base
+          class ::Cheat < Base
             new :SPADES, 'spades'
             new :SPADES, 'more spades'
           end
         end.to raise_error(NameError)
 
-        expect { Cheat.class }.to raise_error(NameError)
+        expect { ::Cheat.class }.to raise_error(NameError)
       end
 
       it 'disallows duplicate values' do
         expect do
-          class Cheat < Base
+          class ::Cheat < Base
             new :SPADES, 'spades'
             new :ALSO_SPADES, 'spades'
           end
         end.to raise_error(NameError)
 
-        expect { Cheat.class }.to raise_error(NameError)
+        expect { ::Cheat.class }.to raise_error(NameError)
       end
 
       it 'defaults the value to a lower-cased version of the symbol' do
@@ -377,7 +377,7 @@ module TypesafeEnum
     end
 
     it 'supports "inner class" methods via instance_eval' do
-      class Operation < Base
+      class ::Operation < Base
         new(:PLUS, '+').instance_eval do
           def eval(x, y)
             x + y

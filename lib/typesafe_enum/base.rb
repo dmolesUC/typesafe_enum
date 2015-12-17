@@ -63,10 +63,14 @@ module TypesafeEnum
       attr_accessor :by_value
       attr_accessor :as_array
 
+      def parent
+        parent_name = name =~ /::[^:]+\Z/ ? $`.freeze : nil
+        parent_name ? Object.const_get(parent_name) : Object
+      end
+
       def undefine_class
-        enclosing_module = Module.nesting.last
         class_value = name.split('::').last || ''
-        enclosing_module.send(:remove_const, class_value)
+        parent.send(:remove_const, class_value)
       end
 
       def register(instance)
