@@ -14,8 +14,7 @@ Gem::Specification.new do |spec|
   spec.description   = 'A gem that implements the typesafe enum pattern in Ruby'
   spec.license       = 'MIT'
 
-  origin_uri = URI(`git config --get remote.origin.url`.chomp)
-  spec.homepage = URI::HTTP.build(host: origin_uri.host, path: origin_uri.path.chomp('.git')).to_s
+  spec.homepage      = 'https://github.com/dmolesUC3/typesafe_enum'
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
