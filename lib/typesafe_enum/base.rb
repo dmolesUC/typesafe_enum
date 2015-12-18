@@ -59,9 +59,17 @@ module TypesafeEnum
 
       private
 
-      attr_accessor :by_key
-      attr_accessor :by_value
-      attr_accessor :as_array
+      def by_key
+        @by_key ||= {}
+      end
+
+      def by_value
+        @by_value ||= {}
+      end
+
+      def as_array
+        @as_array ||= []
+      end
 
       def parent
         parent_name = name =~ /::[^:]+\Z/ ? $`.freeze : nil
@@ -74,38 +82,25 @@ module TypesafeEnum
       end
 
       def register(instance)
-        ensure_registries
-        key, value = valid_key_and_value(instance)
-
-        # TODO: warn, and don't register, in event of duplicates (instead of failing w/NameError)
-
-        by_key[key] = instance
-        by_value[value] = instance
-        as_array << instance
-        const_set(key.to_s, instance)
-      end
-
-      def ensure_registries
-        self.by_key ||= {}
-        self.by_value ||= {}
-        self.as_array ||= []
-      end
-
-      def valid_key_and_value(instance)
         key = instance.key
         value = instance.value
 
-        begin
-          fail NameError, "#{name}::#{key} already exists" if find_by_key(key)
-          fail NameError, "A #{name} instance with value '#{value}' already exists" if find_by_value(value)
-        rescue NameError => e
-          undefine_class
-          raise e
+        existing = find_by_key(key)
+        if existing
+          if existing.value == value
+            warn("ignoring redeclaration of #{name}::#{key} with value: #{value}")
+            return
+          else
+            fail NameError, "#{name}::#{key} already exists"
+          end
         end
+        fail NameError, "A #{name} instance with value '#{value}' already exists" if find_by_value(value)
 
-        [key, value]
+        const_set(key.to_s, instance)
+        by_key[key] = instance
+        by_value[value] = instance
+        as_array << instance
       end
-
     end
 
     # The symbol key for the enum instance

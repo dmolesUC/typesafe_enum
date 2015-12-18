@@ -1,27 +1,27 @@
 # coding: UTF-8
 require 'spec_helper'
 
-class ::Suit < TypesafeEnum::Base
+class Suit < TypesafeEnum::Base
   new :CLUBS
   new :DIAMONDS
   new :HEARTS
   new :SPADES
 end
 
-class ::Tarot < TypesafeEnum::Base
+class Tarot < TypesafeEnum::Base
   new :CUPS, 'Cups'
   new :COINS, 'Coins'
   new :WANDS, 'Wands'
   new :SWORDS, 'Swords'
 end
 
-class ::RGBColor < TypesafeEnum::Base
+class RGBColor < TypesafeEnum::Base
   new :RED, :red
   new :GREEN, :green
   new :BLUE, :blue
 end
 
-class ::Scale < TypesafeEnum::Base
+class Scale < TypesafeEnum::Base
   new :DECA, 10
   new :HECTO, 100
   new :KILO, 1_000
@@ -39,40 +39,55 @@ module TypesafeEnum
 
       it 'insists symbols be symbols' do
         expect do
-          class ::Cheat < Base
+          class ::StringKeys < Base
             new 'spades', 'spades'
           end
         end.to raise_error(TypeError)
+        expect(::StringKeys.to_a).to be_empty
       end
 
       it 'insists symbols be uppercase' do
         expect do
-          class ::Cheat < Base
+          class ::LowerCaseKeys < Base
             new :spades, 'spades'
           end
         end.to raise_error(NameError)
+        expect(::LowerCaseKeys.to_a).to be_empty
       end
 
-      it 'disallows duplicate symbols' do
+      it 'disallows duplicate symbols with different values' do
         expect do
-          class ::Cheat < Base
+          class ::DuplicateSymbols < Base
             new :SPADES, 'spades'
             new :SPADES, 'more spades'
           end
         end.to raise_error(NameError)
-
-        expect { ::Cheat.class }.to raise_error(NameError)
+        expect(::DuplicateSymbols.to_a).to eq([::DuplicateSymbols::SPADES])
+        expect(::DuplicateSymbols::SPADES.value).to eq('spades')
+        expect(::DuplicateSymbols.find_by_value('more spades')).to be_nil
       end
 
-      it 'disallows duplicate values' do
+      it 'disallows duplicate values with different symbols' do
         expect do
-          class ::Cheat < Base
+          class ::DuplicateValues < Base
             new :SPADES, 'spades'
             new :ALSO_SPADES, 'spades'
           end
         end.to raise_error(NameError)
+        expect(::DuplicateValues.to_a).to eq([::DuplicateValues::SPADES])
+        expect(::DuplicateValues::SPADES.value).to eq('spades')
+        expect(::DuplicateValues.find_by_key(:ALSO_SPADES)).to be_nil
+      end
 
-        expect { ::Cheat.class }.to raise_error(NameError)
+      it 'allows, but ignores redeclaration of identical instances' do
+        class ::IdenticalInstances < Base
+          new :SPADES, 'spades'
+        end
+        expect(::IdenticalInstances).to receive(:warn).with('ignoring redeclaration of IdenticalInstances::SPADES with value: spades')
+        class ::IdenticalInstances < Base
+          new :SPADES, 'spades'
+        end
+        expect(::IdenticalInstances.to_a).to eq([::IdenticalInstances::SPADES])
       end
 
       it 'defaults the value to a lower-cased version of the symbol' do
