@@ -79,6 +79,15 @@ module TypesafeEnum
         expect(::DuplicateValues.find_by_key(:ALSO_SPADES)).to be_nil
       end
 
+      it 'disallows nil keys' do
+        expect do
+          class ::NilKeys < Base
+            new nil, 'nil'
+          end
+        end.to raise_error(TypeError)
+        expect(::NilKeys.to_a).to be_empty
+      end
+
       it 'allows, but ignores redeclaration of identical instances' do
         class ::IdenticalInstances < Base
           new :SPADES, 'spades'

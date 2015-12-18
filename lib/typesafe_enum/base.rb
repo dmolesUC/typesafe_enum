@@ -71,30 +71,22 @@ module TypesafeEnum
         @as_array ||= []
       end
 
-      def parent
-        parent_name = name =~ /::[^:]+\Z/ ? $`.freeze : nil
-        parent_name ? Object.const_get(parent_name) : Object
-      end
-
-      def undefine_class
-        class_value = name.split('::').last || ''
-        parent.send(:remove_const, class_value)
+      def valid_key_and_value(instance)
+        key = instance.key
+        value = instance.value
+        if (found = find_by_key(key))
+          fail NameError, "#{name}::#{key} already exists" unless value == found.value
+          warn("ignoring redeclaration of #{name}::#{key} with value: #{value}")
+          nil
+        else
+          fail NameError, "A #{name} instance with value '#{value}' already exists" if find_by_value(value)
+          [key, value]
+        end
       end
 
       def register(instance)
-        key = instance.key
-        value = instance.value
-
-        existing = find_by_key(key)
-        if existing
-          if existing.value == value
-            warn("ignoring redeclaration of #{name}::#{key} with value: #{value}")
-            return
-          else
-            fail NameError, "#{name}::#{key} already exists"
-          end
-        end
-        fail NameError, "A #{name} instance with value '#{value}' already exists" if find_by_value(value)
+        key, value = valid_key_and_value(instance)
+        return unless key && value
 
         const_set(key.to_s, instance)
         by_key[key] = instance

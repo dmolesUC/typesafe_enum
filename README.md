@@ -69,6 +69,76 @@ Scale::KILO.value
 # => 1000
 ```
 
+Declaring two instances with the same key will produce an error:
+
+```ruby
+class Suit < TypesafeEnum::Base
+  new :CLUBS
+  new :DIAMONDS
+  new :HEARTS
+  new :SPADES
+  new :SPADES, '♠'
+end
+```
+
+```
+typesafe_enum/lib/typesafe_enum/base.rb:88:in `valid_key_and_value': Suit::SPADES already exists (NameError)
+	from /Users/dmoles/Work/Stash/typesafe_enum/lib/typesafe_enum/base.rb:98:in `register'
+	from /Users/dmoles/Work/Stash/typesafe_enum/lib/typesafe_enum/base.rb:138:in `block in initialize'
+	from /Users/dmoles/Work/Stash/typesafe_enum/lib/typesafe_enum/base.rb:137:in `class_exec'
+	from /Users/dmoles/Work/Stash/typesafe_enum/lib/typesafe_enum/base.rb:137:in `initialize'
+	from ./scratch.rb:11:in `new'
+	from ./scratch.rb:11:in `<class:Suit>'
+	from ./scratch.rb:6:in `<main>'
+```
+
+Likewise two instances with the same value but different keys:
+
+```ruby
+class Tarot < TypesafeEnum::Base
+  new :CUPS, 'Cups'
+  new :COINS, 'Coins'
+  new :WANDS, 'Wands'
+  new :SWORDS, 'Swords'
+  new :STAVES, 'Wands'
+end
+```
+
+```
+/typesafe_enum/lib/typesafe_enum/base.rb:92:in `valid_key_and_value': A Tarot instance with value 'Wands' already exists (NameError)
+	from /Users/dmoles/Work/Stash/typesafe_enum/lib/typesafe_enum/base.rb:98:in `register'
+	from /Users/dmoles/Work/Stash/typesafe_enum/lib/typesafe_enum/base.rb:138:in `block in initialize'
+	from /Users/dmoles/Work/Stash/typesafe_enum/lib/typesafe_enum/base.rb:137:in `class_exec'
+	from /Users/dmoles/Work/Stash/typesafe_enum/lib/typesafe_enum/base.rb:137:in `initialize'
+	from ./scratch.rb:11:in `new'
+	from ./scratch.rb:11:in `<class:Tarot>'
+	from ./scratch.rb:6:in `<main>'
+```
+
+However, declaring an identical key/value pair will be ignored with a warning, to avoid unnecessary errors
+when, e.g., a declaration file is accidentally `required` twice.
+
+```ruby
+class Tarot < TypesafeEnum::Base
+  new :CUPS, 'Cups'
+  new :COINS, 'Coins'
+  new :WANDS, 'Wands'
+  new :SWORDS, 'Swords'
+end
+
+class Tarot < TypesafeEnum::Base
+  new :CUPS, 'Cups'
+  new :COINS, 'Coins'
+  new :WANDS, 'Wands'
+  new :SWORDS, 'Swords'
+end
+
+# => ignoring redeclaration of Tarot::CUPS with value: Cups
+# => ignoring redeclaration of Tarot::COINS with value: Coins
+# => ignoring redeclaration of Tarot::WANDS with value: Wands
+# => ignoring redeclaration of Tarot::SWORDS with value: Swords
+```
+
 ## Ordering
 
 Enum instances have an ordinal value corresponding to their declaration

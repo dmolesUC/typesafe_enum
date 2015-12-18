@@ -1,3 +1,11 @@
+## 0.1.4
+
+- Exact duplicate instances (e.g. due to multiple `requires`) are now ignored with a warning,
+  instead of causing a `NameError`. Duplicate keys with different values, and duplicate values
+  with different keys, still raise a `NameError`.
+- `NameErrors` due to invalid keys or values no longer cause the enum class to be undefined.
+  However, the invalid instances will still not be registered and no constants created for them.
+
 ## 0.1.3
 
 - Fixed issue where invalid classes weren't properly removed after duplicate name declarations,
