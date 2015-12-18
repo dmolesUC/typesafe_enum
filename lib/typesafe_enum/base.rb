@@ -77,6 +77,8 @@ module TypesafeEnum
         ensure_registries
         key, value = valid_key_and_value(instance)
 
+        # TODO: warn, and don't register, in event of duplicates (instead of failing w/NameError)
+
         by_key[key] = instance
         by_value[value] = instance
         as_array << instance
