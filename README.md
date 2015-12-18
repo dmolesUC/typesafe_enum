@@ -116,7 +116,7 @@ end
 ```
 
 However, declaring an identical key/value pair will be ignored with a warning, to avoid unnecessary errors
-when, e.g., a declaration file is accidentally `required` twice.
+when, e.g., a declaration file is accidentally loaded twice.
 
 ```ruby
 class Tarot < TypesafeEnum::Base
