@@ -1,7 +1,8 @@
-## 0.1.5 (Next)
+## 0.1.5 (27 Jan 2016)
 
 - Include the original call site in the warning message for duplicate instances to help
   with debugging.
+- Modified gemspec to take into account SSH checkouts when determining the homepage URL.
 
 ## 0.1.4 (18 Dec 2015))
 
