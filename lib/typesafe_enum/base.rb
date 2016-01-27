@@ -76,7 +76,7 @@ module TypesafeEnum
         value = instance.value
         if (found = find_by_key(key))
           fail NameError, "#{name}::#{key} already exists" unless value == found.value
-          warn("ignoring redeclaration of #{name}::#{key} with value: #{value}")
+          warn("ignoring redeclaration of #{name}::#{key} with value #{value} (source: #{caller[4]})")
           nil
         else
           fail NameError, "A #{name} instance with value '#{value}' already exists" if find_by_value(value)

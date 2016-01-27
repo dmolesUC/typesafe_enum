@@ -92,7 +92,7 @@ module TypesafeEnum
         class ::IdenticalInstances < Base
           new :SPADES, 'spades'
         end
-        expect(::IdenticalInstances).to receive(:warn).with('ignoring redeclaration of IdenticalInstances::SPADES with value: spades')
+        expect(::IdenticalInstances).to receive(:warn).with(a_string_matching(/ignoring redeclaration of IdenticalInstances::SPADES with value spades/))
         class ::IdenticalInstances < Base
           new :SPADES, 'spades'
         end

@@ -133,11 +133,16 @@ class Tarot < TypesafeEnum::Base
   new :SWORDS, 'Swords'
 end
 
-# => ignoring redeclaration of Tarot::CUPS with value: Cups
-# => ignoring redeclaration of Tarot::COINS with value: Coins
-# => ignoring redeclaration of Tarot::WANDS with value: Wands
-# => ignoring redeclaration of Tarot::SWORDS with value: Swords
+# => ignoring redeclaration of Tarot::CUPS with value Cups (source: /tmp/duplicate_enum.rb:13:in `new')
+# => ignoring redeclaration of Tarot::COINS with value Coins (source: /tmp/duplicate_enum.rb:14:in `new')
+# => ignoring redeclaration of Tarot::WANDS with value Wands (source: /tmp/duplicate_enum.rb:15:in `new')
+# => ignoring redeclaration of Tarot::SWORDS with value Swords (source: /tmp/duplicate_enum.rb:16:in `new')
 ```
+
+**Note:** If do you see these warnings, it probably means there's something wrong with your `$LOAD_PATH` (e.g.,
+the same directory present both via its real path and via a symlink). This can cause all sorts of problems,
+and Ruby's `require` statement is [known to be not smart enough to deal with it](https://bugs.ruby-lang.org/issues/4403),
+so it's worth tracking down and fixing the root cause.
 
 ## Ordering
 
