@@ -1,4 +1,4 @@
-# Typesafe::Enum
+# TypesafeEnum
 
 [![Build Status](https://travis-ci.org/dmolesUC3/typesafe_enum.svg?branch=master)](https://travis-ci.org/dmolesUC3/typesafe_enum)
 [![Code Climate](https://codeclimate.com/github/dmolesUC3/typesafe_enum.svg)](https://codeclimate.com/github/dmolesUC3/typesafe_enum)
