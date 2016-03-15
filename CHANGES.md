@@ -1,3 +1,7 @@
+## 0.1.6 (15 Mar 2016)
+
+- [#3](https://github.com/dmolesUC3/typesafe_enum/pull/3) - No need for `instance_eval` when creating new enum instance methods - [@dblock](https://github.com/dblock).
+
 ## 0.1.5 (27 Jan 2016)
 
 - Include the original call site in the warning message for duplicate instances to help
