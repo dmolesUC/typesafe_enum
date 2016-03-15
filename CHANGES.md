@@ -1,6 +1,7 @@
 ## 0.1.6 (Next)
 
 - `::find_by_value_str` now uses a hash lookup like the other `::find_by` methods.
+- Improved method documentation.
 
 ## 0.1.6 (15 Mar 2016)
 
