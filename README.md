@@ -352,7 +352,7 @@ Bar::BAR == 1
 ```
 
 Java introduced the concept of "typesafe enums", first as a
-[design pattern]((http://www.oracle.com/technetwork/java/page1-139488.html#replaceenums))
+[design pattern](http://www.oracle.com/technetwork/java/page1-139488.html#replaceenums)
 and later as a
 [first-class language construct](https://docs.oracle.com/javase/1.5.0/docs/guide/language/enums.html).
 In Java, an `Enum` class defines a closed, valued set of _instances of that class,_ rather than
