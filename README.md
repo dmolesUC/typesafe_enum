@@ -9,6 +9,28 @@ A Ruby implementation of Joshua Bloch's
 [typesafe enum pattern](http://www.oracle.com/technetwork/java/page1-139488.html#replaceenums),
 with syntax loosely inspired by [Ruby::Enum](https://github.com/dblock/ruby-enum).
 
+## Table of contents
+
+- [Basic usage](#basic-usage)
+- [Ordering](#ordering)
+- [Convenience methods on enum classes](#convenience-methods-on-enum-classes)
+  - [::to\_a](#to_a)
+  - [::size](#size)
+  - [::each, ::each\_with\_index, and ::map](#each-each_with_index-and-map)
+  - [::find\_by\_key, ::find\_by\_value, ::find\_by\_ord](#find_by_key-find_by_value-find_by_ord)
+  - [::find\_by\_value\_str](#find_by_value_str)
+- [Enum classes with methods](#enum-classes-with-methods)
+- [Enum instances with methods](#enum-instances-with-methods)
+- [How is this different from <a href="https://github\.com/dblock/ruby\-enum">Ruby::Enum</a>?](#how-is-this-different-from-rubyenum)
+- [How is this different from java\.lang\.Enum?](#how-is-this-different-from-javalangenum)
+  - [Clunkier syntax](#clunkier-syntax)
+  - [No special switch/case support](#no-special-switchcase-support)
+  - [No serialization support](#no-serialization-support)
+  - [No support classes](#no-support-classes)
+  - [Enum classes are not closed](#enum-classes-are-not-closed)
+- [Contributing](#contributing)
+
+
 ## Basic usage
 
 Create a new enum class and a set of instances:
