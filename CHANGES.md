@@ -1,6 +1,11 @@
+## 0.1.6 (Next)
+
+- `::find_by_value_str` now uses a hash lookup like the other `::find_by` methods.
+
 ## 0.1.6 (15 Mar 2016)
 
-- [#3](https://github.com/dmolesUC3/typesafe_enum/pull/3) - No need for `instance_eval` when creating new enum instance methods - [@dblock](https://github.com/dblock).
+- [#3](https://github.com/dmolesUC3/typesafe_enum/pull/3) - No need for `instance_eval`
+  when creating new enum instance methods - [@dblock](https://github.com/dblock).
 
 ## 0.1.5 (27 Jan 2016)
 

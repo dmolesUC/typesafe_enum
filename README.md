@@ -251,9 +251,6 @@ Scale.find_by_value_str('1000000')
 # => #<Scale:0x007f8513a93810 @key=:MEGA, @value=1000000, @ord=3>
 ```
 
-(Note that unlike the other `::find_by…` methods, which use hash lookups, `::find_by_value_str`
-is linear in the number of enum values, so it's best suited for smaller enumerations.)
-
 ## Enum classes with methods
 
 Enum classes are just classes. They can have methods, and other non-enum constants.
