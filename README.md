@@ -13,6 +13,7 @@ with syntax loosely inspired by [Ruby::Enum](https://github.com/dblock/ruby-enum
 
 - [Basic usage](#basic-usage)
 - [Ordering](#ordering)
+- [String representations](#string-representations)
 - [Convenience methods on enum classes](#convenience-methods-on-enum-classes)
     - [::to\_a](#to_a)
     - [::size](#size)
@@ -185,6 +186,18 @@ Suit::SPADES > Suit::DIAMONDS
 Suit::SPADES > Tarot::CUPS
 # ArgumentError: comparison of Suit with Tarot failed
 ```
+
+## String representations
+
+The default `to_s` implementation provides the enum's class, key, value,
+and ordinal, e.g.
+
+```ruby
+Suit::DIAMONDS.to_s
+# => "Suit::DIAMONDS [1] -> diamonds"
+```
+
+It can of course be overridden.
 
 ## Convenience methods on enum classes
 

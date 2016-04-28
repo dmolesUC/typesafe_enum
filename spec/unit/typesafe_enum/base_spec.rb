@@ -294,6 +294,21 @@ module TypesafeEnum
       end
     end
 
+    describe '#to_s' do
+      it 'provides an informative string' do
+        aggregate_failures 'informative string' do
+          [Suit, Tarot, RGBColor, Scale].each do |ec|
+            ec.each do |ev|
+              result = ev.to_s
+              [ec.to_s, ev.key, ev.ord, ev.value].each do |info|
+                expect(result).to include("#{info}")
+              end
+            end
+          end
+        end
+      end
+    end
+
     describe '::find_by_key' do
       it 'maps symbol keys to enum instances' do
         keys = [:CLUBS, :DIAMONDS, :HEARTS, :SPADES]

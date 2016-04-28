@@ -147,6 +147,10 @@ module TypesafeEnum
       end
     end
 
+    def to_s
+      "#{self.class}::#{key} [#{ord}] -> #{value}"
+    end
+
     private
 
     def initialize(key, value = nil, &block)

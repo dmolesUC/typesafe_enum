@@ -1,5 +1,12 @@
-## 0.1.6 (Next)
+## 0.1.7 (28 April 2016)
 
+- The default `to_s` for `TypesafeEnum::Base` now includes the enum's class, key, value,
+  and ordinal, e.g.
+
+      Suit::DIAMONDS.to_s
+      # => "Suit::DIAMONDS [1] -> diamonds"
+
+  (Fixes [#5](https://github.com/dmolesUC3/typesafe_enum/issues/5).)
 - `::find_by_value_str` now uses a hash lookup like the other `::find_by` methods.
 - Improved method documentation.
 
