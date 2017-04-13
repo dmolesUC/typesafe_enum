@@ -1,3 +1,7 @@
+## 0.1.8 (next)
+
+- Update to Ruby 2.2.5
+
 ## 0.1.7 (28 April 2016)
 
 - The default `to_s` for `TypesafeEnum::Base` now includes the enum's class, key, value,
