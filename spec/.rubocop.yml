@@ -1,5 +1,8 @@
 inherit_from: ../.rubocop.yml
 
+Metrics/BlockLength:
+  Enabled: false
+
 Metrics/MethodLength:
   Enabled: false
 
@@ -7,4 +10,7 @@ Metrics/ModuleLength:
   Enabled: false
 
 Style/ClassAndModuleChildren:
+  Enabled: false
+
+Security/MarshalLoad:
   Enabled: false

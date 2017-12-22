@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A Ruby implementation of Joshua Bloch's
 # [typesafe enum pattern](http://www.oracle.com/technetwork/java/page1-139488.html#replaceenums)
 module TypesafeEnum
@@ -68,7 +70,7 @@ module TypesafeEnum
       # @param ord [Integer] the ordinal to look up
       # @return [self, nil] the corresponding enum instance, or nil
       def find_by_ord(ord)
-        return nil if ord < 0 || ord > size
+        return nil if ord > size || ord.negative?
         as_array[ord]
       end
 
@@ -94,11 +96,11 @@ module TypesafeEnum
         key = instance.key
         value = instance.value
         if (found = find_by_key(key))
-          fail NameError, "#{name}::#{key} already exists" unless value == found.value
-          warn("ignoring redeclaration of #{name}::#{key} with value #{value} (source: #{caller[4]})")
+          raise NameError, "#{name}::#{key} already exists" unless value == found.value
+          warn("ignoring redeclaration of #{name}::#{key} with value #{value} (source: #{caller(5..5).first})")
           nil
         else
-          fail NameError, "A #{name} instance with value '#{value}' already exists" if find_by_value(value)
+          raise NameError, "A #{name} instance with value '#{value}' already exists" if find_by_value(value)
           [key, value]
         end
       end
@@ -143,7 +145,7 @@ module TypesafeEnum
         result = 17
         result = 31 * result + self.class.hash
         result = 31 * result + ord
-        result.is_a?(Fixnum) ? result : result.hash
+        result.is_a?(Integer) ? result : result.hash
       end
     end
 
@@ -154,7 +156,7 @@ module TypesafeEnum
     private
 
     def initialize(key, value = nil, &block)
-      fail TypeError, "#{key} is not a symbol" unless key.is_a?(Symbol)
+      raise TypeError, "#{key} is not a symbol" unless key.is_a?(Symbol)
       @key = key
       @value = value || key.to_s.downcase
       @ord = self.class.size

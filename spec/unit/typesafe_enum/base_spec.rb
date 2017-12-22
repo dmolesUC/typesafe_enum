@@ -1,4 +1,6 @@
-# coding: utf-8
+
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 class Suit < TypesafeEnum::Base
@@ -152,7 +154,7 @@ module TypesafeEnum
     describe '::map' do
       it 'maps enum values' do
         all_keys = Suit.map(&:key)
-        expect(all_keys).to eq([:CLUBS, :DIAMONDS, :HEARTS, :SPADES])
+        expect(all_keys).to eq(%i[CLUBS DIAMONDS HEARTS SPADES])
       end
     end
 
@@ -253,7 +255,7 @@ module TypesafeEnum
 
       it 'always returns a Fixnum' do
         Suit.each do |s1|
-          expect(s1.hash).to be_a(Fixnum)
+          expect(s1.hash).to be_a(Integer)
         end
       end
     end
@@ -270,7 +272,7 @@ module TypesafeEnum
 
     describe '#value' do
       it 'returns the string value of the enum instance' do
-        expected = %w(clubs diamonds hearts spades)
+        expected = %w[clubs diamonds hearts spades]
         Suit.each_with_index do |s, index|
           expect(s.value).to eq(expected[index])
         end
@@ -279,7 +281,7 @@ module TypesafeEnum
 
     describe '#key' do
       it 'returns the symbol key of the enum instance' do
-        expected = [:CLUBS, :DIAMONDS, :HEARTS, :SPADES]
+        expected = %i[CLUBS DIAMONDS HEARTS SPADES]
         Suit.each_with_index do |s, index|
           expect(s.key).to eq(expected[index])
         end
@@ -301,7 +303,7 @@ module TypesafeEnum
             ec.each do |ev|
               result = ev.to_s
               [ec.to_s, ev.key, ev.ord, ev.value].each do |info|
-                expect(result).to include("#{info}")
+                expect(result).to include(info.to_s)
               end
             end
           end
@@ -311,7 +313,7 @@ module TypesafeEnum
 
     describe '::find_by_key' do
       it 'maps symbol keys to enum instances' do
-        keys = [:CLUBS, :DIAMONDS, :HEARTS, :SPADES]
+        keys = %i[CLUBS DIAMONDS HEARTS SPADES]
         expected = Suit.to_a
         keys.each_with_index do |k, index|
           expect(Suit.find_by_key(k)).to be(expected[index])
@@ -325,7 +327,7 @@ module TypesafeEnum
 
     describe '::find_by_value' do
       it 'maps values to enum instances' do
-        values = %w(clubs diamonds hearts spades)
+        values = %w[clubs diamonds hearts spades]
         expected = Suit.to_a
         values.each_with_index do |n, index|
           expect(Suit.find_by_value(n)).to be(expected[index])
@@ -351,7 +353,7 @@ module TypesafeEnum
 
     describe '::find_by_value_str' do
       it 'maps string values to enum instances' do
-        values = %w(clubs diamonds hearts spades)
+        values = %w[clubs diamonds hearts spades]
         expected = Suit.to_a
         values.each_with_index do |n, index|
           expect(Suit.find_by_value_str(n)).to be(expected[index])
@@ -407,11 +409,11 @@ module TypesafeEnum
         when Suit::SPADES
           '♠'
         else
-          fail "unknown suit: #{self}"
+          raise "unknown suit: #{self}"
         end
       end
 
-      expect(Suit.map { |s| pip(s) }).to eq(%w(♣ ♦ ♥ ♠))
+      expect(Suit.map { |s| pip(s) }).to eq(%w[♣ ♦ ♥ ♠])
     end
 
     it 'supports "inner class" methods' do
