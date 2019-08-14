@@ -3,22 +3,87 @@ Style/ClassAndModuleChildren:
   Exclude:
     - 'example.rb'
 
-# Disable line-length check; it's too easy for the cure to be worse than the disease
+# Allow one line around block body (Layout/EmptyLines will still disallow two or more)
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+# Allow one line around class body (Layout/EmptyLines will still disallow two or more)
+Layout/EmptyLinesAroundClassBody:
+  Enabled: false
+
+# Allow one line around module body (Layout/EmptyLines will still disallow two or more)
+Layout/EmptyLinesAroundModuleBody:
+  Enabled: false
+
+# Make indents consistent regardless of the lengths of variables and method names and whatnot
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+# Produces monsters
+Layout/MultilineOperationIndentation:
+  Enabled: false
+
+# Reasonable line-length check; it's too easy for the cure to be worse than the disease
 Metrics/LineLength:
+  Max: 150
+
+# Just because something looks like an accessor doesn't mean it is one
+Naming/PredicateName:
+  Exclude:
+    - 'app/controllers/application_controller.rb'
+
+# Confusing and weird
+Naming/VariableNumber:
+  Enabled: False
+
+# We meant to do that
+Naming/MemoizedInstanceVariableName:
+  Enabled: False
+
+# It works in context, trust us
+Naming/UncommunicativeMethodParamName:
+  Enabled: False
+
+# Do what's readable in the context you're in
+Style/AccessModifierDeclarations:
+  Enabled: false
+
+# 👎 to cultural imperialism
+Style/AsciiComments:
+  Enabled: false
+
+# Sometimes we want to distinguish hash parameters from keyword arguments
+Style/BracesAroundHashParameters:
+  Enabled: False
+
+# Seriously?
+Style/CommentedKeyword:
   Enabled: False
 
 # Disable problematic module documentation check (see https://github.com/bbatsov/rubocop/issues/947)
 Style/Documentation:
   Enabled: false
 
-# Allow one line around class body (Style/EmptyLines will still disallow two or more)
-Layout/EmptyLinesAroundClassBody:
+# Adding more line noise to format strings will not improve them
+Style/FormatStringToken:
   Enabled: false
 
-# Allow one line around module body (Style/EmptyLines will still disallow two or more)
-Layout/EmptyLinesAroundModuleBody:
+# Putting '# frozen_string_literal: true' everywhere does not make the world a better place
+Style/FrozenStringLiteralComment:
   Enabled: false
 
-# Allow one line around block body (Style/EmptyLines will still disallow two or more)
-Layout/EmptyLinesAroundBlockBody:
+# `foo.positive?` is cute, but it's not actually more readable than `foo > 0`
+Style/NumericPredicate:
+  Enabled: false
+
+# The semantics of `foo&.bar` are a lot less interchangeable with `foo && foo.bar` than RuboCop thinks
+Style/SafeNavigation:
+  Enabled: false
+
+# Requiring the lambda() method just makes wordy calls wordier
+Style/Lambda:
+  EnforcedStyle: literal
+
+# Unclear why it's a good idea to give parameters semantically meaningless names
+Style/SingleLineBlockParams:
   Enabled: false

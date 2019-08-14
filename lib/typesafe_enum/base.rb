@@ -71,6 +71,7 @@ module TypesafeEnum
       # @return [self, nil] the corresponding enum instance, or nil
       def find_by_ord(ord)
         return nil if ord > size || ord.negative?
+
         as_array[ord]
       end
 
@@ -97,10 +98,12 @@ module TypesafeEnum
         value = instance.value
         if (found = find_by_key(key))
           raise NameError, "#{name}::#{key} already exists" unless value == found.value
+
           warn("ignoring redeclaration of #{name}::#{key} with value #{value} (source: #{caller(5..5).first})")
           nil
         else
           raise NameError, "A #{name} instance with value '#{value}' already exists" if find_by_value(value)
+
           [key, value]
         end
       end
@@ -157,6 +160,7 @@ module TypesafeEnum
 
     def initialize(key, value = nil, &block)
       raise TypeError, "#{key} is not a symbol" unless key.is_a?(Symbol)
+
       @key = key
       @value = value || key.to_s.downcase
       @ord = self.class.size

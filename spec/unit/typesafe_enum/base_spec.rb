@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 
 require 'spec_helper'
@@ -94,7 +93,8 @@ module TypesafeEnum
         class ::IdenticalInstances < Base
           new :SPADES, 'spades'
         end
-        expect(::IdenticalInstances).to receive(:warn).with(a_string_matching(/ignoring redeclaration of IdenticalInstances::SPADES with value spades/))
+        expected_msg = /ignoring redeclaration of IdenticalInstances::SPADES with value spades/
+        expect(::IdenticalInstances).to receive(:warn).with(a_string_matching(expected_msg))
         class ::IdenticalInstances < Base
           new :SPADES, 'spades'
         end
@@ -190,6 +190,7 @@ module TypesafeEnum
         end
       end
 
+      # rubocop:disable Security/MarshalLoad
       it 'survives marshalling' do
         Suit.each do |s1|
           dump = Marshal.dump(s1)
@@ -198,6 +199,7 @@ module TypesafeEnum
           expect(s2 == s1).to eq(true)
         end
       end
+      # rubocop:enable Security/MarshalLoad
     end
 
     describe '#!=' do
@@ -245,6 +247,7 @@ module TypesafeEnum
         end
       end
 
+      # rubocop:disable Security/MarshalLoad
       it 'survives marshalling' do
         Suit.each do |s1|
           dump = Marshal.dump(s1)
@@ -252,6 +255,7 @@ module TypesafeEnum
           expect(s2.hash).to eq(s1.hash)
         end
       end
+      # rubocop:enable Security/MarshalLoad
 
       it 'always returns a Fixnum' do
         Suit.each do |s1|

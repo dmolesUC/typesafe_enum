@@ -1,3 +1,9 @@
+## 0.1.9 (NEXT)
+
+- Update to Ruby 2.5.1
+- Update to rspec 3.8
+- Update to RuboCop 0.74
+
 ## 0.1.8 (22 December 2017)
 
 - Update to Ruby 2.4.1
