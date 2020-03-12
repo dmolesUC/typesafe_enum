@@ -1,3 +1,7 @@
+## 0.2.1 (12 March 2020)
+
+- Update to Rake 12.3.3
+
 ## 0.2.0 (12 March 2020)
 
 - Update to Ruby 2.6.5
