@@ -1,8 +1,9 @@
-## 0.1.9 (NEXT)
+## 0.2.0 (12 March 2020)
 
-- Update to Ruby 2.5.1
-- Update to rspec 3.8
-- Update to RuboCop 0.74
+- Update to Ruby 2.6.5
+- Update to Rake 10.4
+- Update to RSpec 3.9
+- Update to RuboCop 0.80
 
 ## 0.1.8 (22 December 2017)
 

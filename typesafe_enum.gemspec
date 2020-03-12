@@ -23,9 +23,9 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_development_dependency 'rake', '~> 10.4'
-  spec.add_development_dependency 'rspec', '~> 3.8'
-  spec.add_development_dependency 'rubocop', '~> 0.74'
+  spec.add_development_dependency 'rake', '~> 10.5'
+  spec.add_development_dependency 'rspec', '~> 3.9'
+  spec.add_development_dependency 'rubocop', '~> 0.80'
   spec.add_development_dependency 'simplecov', '~> 0.9.2'
   spec.add_development_dependency 'simplecov-console', '~> 0.2.0'
   spec.add_development_dependency 'yard', '~> 0.9', '>= 0.9.12'

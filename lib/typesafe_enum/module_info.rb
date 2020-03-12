@@ -5,8 +5,8 @@ module TypesafeEnum
   NAME = 'typesafe_enum'
 
   # The version of this gem
-  VERSION = '0.1.8'
+  VERSION = '0.2.0'
 
   # The copyright notice for this gem
-  COPYRIGHT = 'Copyright (c) 2017 The Regents of the University of California'
+  COPYRIGHT = 'Copyright (c) 2020 The Regents of the University of California'
 end

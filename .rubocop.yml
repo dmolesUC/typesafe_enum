@@ -15,6 +15,10 @@ Layout/EmptyLinesAroundClassBody:
 Layout/EmptyLinesAroundModuleBody:
   Enabled: false
 
+# Reasonable line-length check; it's too easy for the cure to be worse than the disease
+Layout/LineLength:
+  Max: 150
+
 # Make indents consistent regardless of the lengths of variables and method names and whatnot
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
@@ -22,10 +26,6 @@ Layout/MultilineMethodCallIndentation:
 # Produces monsters
 Layout/MultilineOperationIndentation:
   Enabled: false
-
-# Reasonable line-length check; it's too easy for the cure to be worse than the disease
-Metrics/LineLength:
-  Max: 150
 
 # Just because something looks like an accessor doesn't mean it is one
 Naming/PredicateName:
@@ -41,7 +41,7 @@ Naming/MemoizedInstanceVariableName:
   Enabled: False
 
 # It works in context, trust us
-Naming/UncommunicativeMethodParamName:
+Naming/MethodParameterName:
   Enabled: False
 
 # Do what's readable in the context you're in
@@ -52,10 +52,6 @@ Style/AccessModifierDeclarations:
 Style/AsciiComments:
   Enabled: false
 
-# Sometimes we want to distinguish hash parameters from keyword arguments
-Style/BracesAroundHashParameters:
-  Enabled: False
-
 # Seriously?
 Style/CommentedKeyword:
   Enabled: False
@@ -63,6 +59,18 @@ Style/CommentedKeyword:
 # Disable problematic module documentation check (see https://github.com/bbatsov/rubocop/issues/947)
 Style/Documentation:
   Enabled: false
+
+# Added in RuboCop 0.80
+Style/HashEachMethods:
+  Enabled: true
+
+# Added in RuboCop 0.80
+Style/HashTransformKeys:
+  Enabled: true
+
+# Added in RuboCop 0.80
+Style/HashTransformValues:
+  Enabled: true
 
 # Adding more line noise to format strings will not improve them
 Style/FormatStringToken:
