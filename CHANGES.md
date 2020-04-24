@@ -1,3 +1,7 @@
+## 0.2.2 (23 April 2020)
+
+- Implement [`Enumerable`](https://ruby-doc.org/core-2.6.5/Enumerable.html)
+
 ## 0.2.1 (12 March 2020)
 
 - Update to Rake 12.3.3

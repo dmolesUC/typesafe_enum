@@ -14,22 +14,24 @@ with syntax loosely inspired by [Ruby::Enum](https://github.com/dblock/ruby-enum
 - [Basic usage](#basic-usage)
 - [Ordering](#ordering)
 - [String representations](#string-representations)
+- [Enumerable](#enumerable)
 - [Convenience methods on enum classes](#convenience-methods-on-enum-classes)
-    - [::to\_a](#to_a)
-    - [::size](#size)
-    - [::each, ::each\_with\_index, and ::map](#each-each_with_index-and-map)
-    - [::find\_by\_key, ::find\_by\_value, ::find\_by\_ord](#find_by_key-find_by_value-find_by_ord)
-    - [::find\_by\_value\_str](#find_by_value_str)
+   - [#to_a](#to_a)
+   - [#size](#size)
+   - [#each, <code>#each_with_index</code>, <code>#map</code> and <code>#flat_map</code>](#each-each_with_index-map-and-flat_map)
+   - [#find_by_key, <code>#find_by_value</code>, <code>#find_by_ord</code>](#find_by_key-find_by_value-find_by_ord)
+   - [#find_by_value_str](#find_by_value_str)
 - [Enum classes with methods](#enum-classes-with-methods)
 - [Enum instances with methods](#enum-instances-with-methods)
-- [How is this different from Ruby::Enum?](#how-is-this-different-from-rubyenum)
+- [How is this different from <a href="https://github.com/dblock/ruby-enum">Ruby::Enum</a>?](#how-is-this-different-from-rubyenum)
 - [How is this different from java.lang.Enum?](#how-is-this-different-from-javalangenum)
-    - [Clunkier syntax](#clunkier-syntax)
-    - [No special switch/case support](#no-special-switchcase-support)
-    - [No serialization support](#no-serialization-support)
-    - [No support classes](#no-support-classes)
-    - [Enum classes are not closed](#enum-classes-are-not-closed)
+   - [Clunkier syntax](#clunkier-syntax)
+   - [No special switch/<code>case</code> support](#no-special-switchcase-support)
+   - [No serialization support](#no-serialization-support)
+   - [No support classes](#no-support-classes)
+   - [Enum classes are not closed](#enum-classes-are-not-closed)
 - [Contributing](#contributing)
+
 
 ## Basic usage
 
@@ -199,9 +201,19 @@ Suit::DIAMONDS.to_s
 
 It can of course be overridden.
 
+## `Enumerable`
+
+As of version 0.2.2, `TypesafeEnum` classes implement
+[`Enumerable`](https://ruby-doc.org/core-2.6.5/Enumerable.html),
+so they support methods such as
+[`#find`](https://ruby-doc.org/core-2.6.5/Enumerable.html#method-i-find),
+[`#select`](https://ruby-doc.org/core-2.6.5/Enumerable.html#method-i-select), 
+and  [`#reduce`](https://ruby-doc.org/core-2.6.5/Enumerable.html#method-i-reduce),
+in addition to the convenience methods called out specifically below.
+
 ## Convenience methods on enum classes
 
-### `::to_a`
+### `#to_a`
 
 Returns an array of the enum instances in declaration order:
 
@@ -210,7 +222,7 @@ Tarot.to_a
 # => [#<Tarot:0x007fd4db30eca8 @key=:CUPS, @value="Cups", @ord=0>, #<Tarot:0x007fd4db30ebe0 @key=:COINS, @value="Coins", @ord=1>, #<Tarot:0x007fd4db30eaf0 @key=:WANDS, @value="Wands", @ord=2>, #<Tarot:0x007fd4db30e9b0 @key=:SWORDS, @value="Swords", @ord=3>]
 ```
 
-### `::size`
+### `#size`
 
 Returns the number of enum instances:
 
@@ -219,7 +231,7 @@ Suit.size
 # => 4
 ```
 
-### `::each`, `::each_with_index`, and `::map`
+### `#each`, `#each_with_index`, `#map` and `#flat_map`
 
 Iterate over the set of enum instances:
 
@@ -238,9 +250,12 @@ Suit.each_with_index { |s, i| puts "#{i}: #{s.key}" }
 
 Suit.map(&:value)
 # => ["clubs", "diamonds", "hearts", "spades"]
+
+Suit.flat_map { |s| [s.key, s.value] }
+# => [:CLUBS, "clubs", :DIAMONDS, "diamonds", :HEARTS, "hearts", :SPADES, "spades"]
 ```
 
-### `::find_by_key`, `::find_by_value`, `::find_by_ord`
+### `#find_by_key`, `#find_by_value`, `#find_by_ord`
 
 Look up an enum instance based on its key, value, or ordinal:
 
@@ -253,7 +268,7 @@ Tarot.find_by_ord(3)
 # => #<Tarot:0x007faab19fd810 @key=:SWORDS, @value="Swords", @ord=3>
 ```
 
-### `::find_by_value_str`
+### `#find_by_value_str`
 
 Look up an enum instance based on the string form of its value (as returned by `to_s`) --
 useful for, e.g., XML or JSON mapping of enums with non-string values:
