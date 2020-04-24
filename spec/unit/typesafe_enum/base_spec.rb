@@ -32,8 +32,8 @@ end
 module TypesafeEnum
   describe Base do
 
-    describe '::new' do
-      it ' news a constant enum value' do
+    describe :new do
+      it 'news a constant enum value' do
         enum = Suit::CLUBS
         expect(enum).to be_a(Suit)
       end
@@ -113,7 +113,7 @@ module TypesafeEnum
       end
     end
 
-    describe '::to_a' do
+    describe :to_a do
       it 'returns the values as an array' do
         expect(Suit.to_a).to eq([Suit::CLUBS, Suit::DIAMONDS, Suit::HEARTS, Suit::SPADES])
       end
@@ -125,13 +125,27 @@ module TypesafeEnum
       end
     end
 
-    describe '::size' do
+    describe :size do
       it 'returns the number of enum instnaces' do
         expect(Suit.size).to eq(4)
       end
     end
 
-    describe '::each' do
+    describe :count do
+      it 'returns the number of enum instnaces' do
+        expect(Suit.count).to eq(4)
+      end
+
+      it 'counts items' do
+        expect(Suit.count(Suit::SPADES)).to eq(1)
+      end
+
+      it 'counts items that match a predicate' do
+        expect(Suit.count { |s| s.value.length == 6 }).to eq(2)
+      end
+    end
+
+    describe :each do
       it 'iterates the enum values' do
         expected = [Suit::CLUBS, Suit::DIAMONDS, Suit::HEARTS, Suit::SPADES]
         index = 0
@@ -142,7 +156,7 @@ module TypesafeEnum
       end
     end
 
-    describe '::each_with_index' do
+    describe :each_with_index do
       it 'iterates the enum values with indices' do
         expected = [Suit::CLUBS, Suit::DIAMONDS, Suit::HEARTS, Suit::SPADES]
         Suit.each_with_index do |s, index|
@@ -151,14 +165,21 @@ module TypesafeEnum
       end
     end
 
-    describe '::map' do
+    describe :map do
       it 'maps enum values' do
         all_keys = Suit.map(&:key)
         expect(all_keys).to eq(%i[CLUBS DIAMONDS HEARTS SPADES])
       end
     end
 
-    describe '#<=>' do
+    describe :flat_map do
+      it 'flatmaps enum values' do
+        result = Tarot.flat_map { |t| [t.key, t.value] }
+        expect(result).to eq([:CUPS, 'Cups', :COINS, 'Coins', :WANDS, 'Wands', :SWORDS, 'Swords'])
+      end
+    end
+
+    describe :<=> do
       it 'orders enum instances' do
         Suit.each_with_index do |s1, i1|
           Suit.each_with_index do |s2, i2|
@@ -168,7 +189,7 @@ module TypesafeEnum
       end
     end
 
-    describe '#==' do
+    describe :== do
       it 'returns true for identical instances, false otherwise' do
         Suit.each do |s1|
           Suit.each do |s2|
@@ -202,7 +223,7 @@ module TypesafeEnum
       # rubocop:enable Security/MarshalLoad
     end
 
-    describe '#!=' do
+    describe :!= do
       it 'returns false for identical instances, true otherwise' do
         Suit.each do |s1|
           Suit.each do |s2|
@@ -224,7 +245,7 @@ module TypesafeEnum
       end
     end
 
-    describe '#hash' do
+    describe :hash do
       it 'gives consistent values' do
         Suit.each do |s1|
           Suit.each do |s2|
@@ -264,7 +285,7 @@ module TypesafeEnum
       end
     end
 
-    describe '#eql?' do
+    describe :eql? do
       it 'is consistent with #hash' do
         Suit.each do |s1|
           Suit.each do |s2|
@@ -274,7 +295,7 @@ module TypesafeEnum
       end
     end
 
-    describe '#value' do
+    describe :value do
       it 'returns the string value of the enum instance' do
         expected = %w[clubs diamonds hearts spades]
         Suit.each_with_index do |s, index|
@@ -283,7 +304,7 @@ module TypesafeEnum
       end
     end
 
-    describe '#key' do
+    describe :key do
       it 'returns the symbol key of the enum instance' do
         expected = %i[CLUBS DIAMONDS HEARTS SPADES]
         Suit.each_with_index do |s, index|
@@ -292,7 +313,7 @@ module TypesafeEnum
       end
     end
 
-    describe '#ord' do
+    describe :ord do
       it 'returns the ord value of the enum instance' do
         Suit.each_with_index do |s, index|
           expect(s.ord).to eq(index)
@@ -300,7 +321,7 @@ module TypesafeEnum
       end
     end
 
-    describe '#to_s' do
+    describe :to_s do
       it 'provides an informative string' do
         aggregate_failures 'informative string' do
           [Suit, Tarot, RGBColor, Scale].each do |ec|
@@ -315,7 +336,7 @@ module TypesafeEnum
       end
     end
 
-    describe '::find_by_key' do
+    describe :find_by_key do
       it 'maps symbol keys to enum instances' do
         keys = %i[CLUBS DIAMONDS HEARTS SPADES]
         expected = Suit.to_a
@@ -329,7 +350,7 @@ module TypesafeEnum
       end
     end
 
-    describe '::find_by_value' do
+    describe :find_by_value do
       it 'maps values to enum instances' do
         values = %w[clubs diamonds hearts spades]
         expected = Suit.to_a
@@ -355,7 +376,7 @@ module TypesafeEnum
       end
     end
 
-    describe '::find_by_value_str' do
+    describe :find_by_value_str do
       it 'maps string values to enum instances' do
         values = %w[clubs diamonds hearts spades]
         expected = Suit.to_a
@@ -381,7 +402,7 @@ module TypesafeEnum
       end
     end
 
-    describe '::find_by_ord' do
+    describe :find_by_ord do
       it 'maps ordinal indices to enum instances' do
         Suit.each do |s|
           expect(Suit.find_by_ord(s.ord)).to be(s)
@@ -435,6 +456,10 @@ module TypesafeEnum
       end
 
       expect(Operation.map { |op| op.eval(39, 23) }).to eq([39 + 23, 39 - 23])
+    end
+
+    it 'is an Enumerable' do
+      expect(Suit).to be_an(Enumerable)
     end
   end
 end

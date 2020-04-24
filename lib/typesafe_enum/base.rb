@@ -8,6 +8,7 @@ module TypesafeEnum
     include Comparable
 
     class << self
+      include Enumerable
 
       # Returns an array of the enum instances in declaration order
       # @return [Array<self>] All instances of this enum, in declaration order
@@ -18,30 +19,14 @@ module TypesafeEnum
       # Returns the number of enum instances
       # @return [Integer] the number of instances
       def size
-        as_array ? as_array.length : 0
+        as_array.size
       end
 
       # Iterates over the set of enum instances
       # @yield [self] Each instance of this enum, in declaration order
-      # @return [Array<self>] All instances of this enum, in declaration order
+      # @return [Enumerator<self>] All instances of this enum, in declaration order
       def each(&block)
         to_a.each(&block)
-      end
-
-      # Iterates over the set of enum instances
-      # @yield [self, Integer] Each instance of this enum, in declaration order,
-      #   with its ordinal index
-      # @return [Array<self>] All instances of this enum, in declaration order
-      def each_with_index(&block)
-        to_a.each_with_index(&block)
-      end
-
-      # Iterates over the set of enum instances
-      # @yield [self] Each instance of this enum, in declaration order
-      # @return [Array] An array containing the result of applying `&block`
-      #   to each instance of this enum, in instance declaration order
-      def map(&block)
-        to_a.map(&block)
       end
 
       # Looks up an enum instance based on its key
