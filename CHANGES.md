@@ -1,3 +1,5 @@
+## 0.3.1 (next)
+
 ## 0.3.0 (26 October 2020)
 
 - Support explicit nil values
