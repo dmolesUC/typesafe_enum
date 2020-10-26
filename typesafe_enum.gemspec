@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.name          = TypesafeEnum::NAME
   spec.version       = TypesafeEnum::VERSION
   spec.authors       = ['David Moles']
-  spec.email         = ['david.moles@ucop.edu']
+  spec.email         = ['dmoles@berkeley.edu']
   spec.summary       = 'Typesafe enum pattern for Ruby'
   spec.description   = 'A gem that implements the typesafe enum pattern in Ruby'
   spec.license       = 'MIT'
@@ -23,9 +23,11 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
+  spec.required_ruby_version = '>= 2.6.0'
+
   spec.add_development_dependency 'rake', '~> 12.3', '>= 12.3.3'
   spec.add_development_dependency 'rspec', '~> 3.9'
-  spec.add_development_dependency 'rubocop', '~> 0.80'
+  spec.add_development_dependency 'rubocop', '0.91'
   spec.add_development_dependency 'simplecov', '~> 0.18'
   spec.add_development_dependency 'simplecov-console', '~> 0.7'
   spec.add_development_dependency 'yard', '~> 0.9', '>= 0.9.12'

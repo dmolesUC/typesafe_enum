@@ -1,5 +1,8 @@
 inherit_from: ../.rubocop.yml
 
+Lint/ConstantDefinitionInBlock:
+  Enabled: false
+
 Style/ClassAndModuleChildren:
   Enabled: false
 

@@ -1,3 +1,9 @@
+## 0.3.0 (next)
+
+- Update author email in gemspec
+- Update RuboCop to version 0.91 and pin version
+- Set minimum required_ruby_version to 2.6.0
+
 ## 0.2.2 (23 April 2020)
 
 - Implement [`Enumerable`](https://ruby-doc.org/core-2.6.5/Enumerable.html)
