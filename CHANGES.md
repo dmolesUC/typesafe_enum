@@ -1,4 +1,4 @@
-## 0.3.0 (next)
+## 0.3.0 (26 October 2020)
 
 - Support explicit nil values
 - Update author email in gemspec
