@@ -102,7 +102,9 @@ module TypesafeEnum
         raise NameError, "A #{name} instance with value #{value.inspect} already exists: #{found.key}" unless key == found.key
 
         # valid_key() should already have warned us, and valid_key_and_value() should have exited early, but just in case
+        # :nocov:
         warn("ignoring redeclaration of #{name}::#{key} with value #{value.inspect} (source: #{caller(6..6).first})")
+        # :nocov:
       end
 
       def register(instance)
