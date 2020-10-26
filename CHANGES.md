@@ -3,6 +3,7 @@
 - Update author email in gemspec
 - Update RuboCop to version 0.91 and pin version
 - Set minimum required_ruby_version to 2.6.0
+- Bump .ruby-version to 2.6.6
 
 ## 0.2.2 (23 April 2020)
 
