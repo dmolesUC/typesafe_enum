@@ -29,6 +29,13 @@ class Scale < TypesafeEnum::Base
   new :MEGA, 1_000_000
 end
 
+class Scheme < TypesafeEnum::Base
+  new :HTTP, 'http'
+  new :HTTPS, 'https'
+  new :EXAMPLE, 'example'
+  new :UNKNOWN, nil
+end
+
 module TypesafeEnum
   describe Base do
 
@@ -36,6 +43,15 @@ module TypesafeEnum
       it 'news a constant enum value' do
         enum = Suit::CLUBS
         expect(enum).to be_a(Suit)
+      end
+
+      it 'allows nil values' do
+        expect do
+          class ::NilValues < Base
+            new :NONE, nil
+          end
+        end.not_to raise_error
+        expect(::NilValues.to_a).not_to be_empty
       end
 
       it 'insists symbols be symbols' do
@@ -80,6 +96,18 @@ module TypesafeEnum
         expect(::DuplicateValues.find_by_key(:ALSO_SPADES)).to be_nil
       end
 
+      it 'disallows duplicate nil values' do
+        expect do
+          class ::DuplicateNilValues < Base
+            new :NONE, nil
+            new :NULL, nil
+          end.to raise_error(NameError)
+          expect(::DuplicateNilValues.to_a).to eq([::DuplicateNilValues::NONE])
+          expect(::DuplicateNilValues::NONE.value).to be_nil
+          expect(::DuplicateNilValues.find_by_key(:NULL)).to be_nil
+        end
+      end
+
       it 'disallows nil keys' do
         expect do
           class ::NilKeys < Base
@@ -93,8 +121,8 @@ module TypesafeEnum
         class ::IdenticalInstances < Base
           new :SPADES, 'spades'
         end
-        expected_msg = /ignoring redeclaration of IdenticalInstances::SPADES with value spades/
-        expect(::IdenticalInstances).to receive(:warn).with(a_string_matching(expected_msg))
+        expected_msg = /ignoring redeclaration of IdenticalInstances::SPADES with value "spades" \(source: .*base_spec.rb:[0-9]+:in `new'\)/
+        expect(::IdenticalInstances).to receive(:warn).once.with(expected_msg)
         class ::IdenticalInstances < Base
           new :SPADES, 'spades'
         end
@@ -302,6 +330,20 @@ module TypesafeEnum
           expect(s.value).to eq(expected[index])
         end
       end
+
+      it 'returns an explicit value' do
+        expected = [10, 100, 1000, 1_000_000]
+        Scale.each_with_index do |s, index|
+          expect(s.value).to eq(expected[index])
+        end
+      end
+
+      it 'supports nil values' do
+        expected = ['http', 'https', 'example', nil]
+        Scheme.each_with_index do |s, index|
+          expect(s.value).to eq(expected[index])
+        end
+      end
     end
 
     describe :key do
@@ -324,10 +366,10 @@ module TypesafeEnum
     describe :to_s do
       it 'provides an informative string' do
         aggregate_failures 'informative string' do
-          [Suit, Tarot, RGBColor, Scale].each do |ec|
+          [Suit, Tarot, RGBColor, Scale, Scheme].each do |ec|
             ec.each do |ev|
               result = ev.to_s
-              [ec.to_s, ev.key, ev.ord, ev.value].each do |info|
+              [ec.to_s, ev.key, ev.ord, ev.value.inspect].each do |info|
                 expect(result).to include(info.to_s)
               end
             end
@@ -374,6 +416,12 @@ module TypesafeEnum
           expect(Scale.find_by_value(s.value)).to be(s)
         end
       end
+
+      it 'supports enums with explicit nil values' do
+        Scheme.each do |s|
+          expect(Scheme.find_by_value(s.value)).to be(s)
+        end
+      end
     end
 
     describe :find_by_value_str do
@@ -398,6 +446,12 @@ module TypesafeEnum
       it 'supports enums with integer values' do
         Scale.each do |s|
           expect(Scale.find_by_value_str(s.value.to_s)).to be(s)
+        end
+      end
+
+      it 'supports enums with explicit nil values' do
+        Scheme.each do |s|
+          expect(Scheme.find_by_value(s.value)).to be(s)
         end
       end
     end

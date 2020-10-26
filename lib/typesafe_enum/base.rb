@@ -79,23 +79,35 @@ module TypesafeEnum
       end
 
       def valid_key_and_value(instance)
+        return unless (key = valid_key(instance))
+
+        [key, valid_value(instance)]
+      end
+
+      def valid_key(instance)
         key = instance.key
+        return key unless (found = find_by_key(key))
+
         value = instance.value
-        if (found = find_by_key(key))
-          raise NameError, "#{name}::#{key} already exists" unless value == found.value
+        raise NameError, "#{name}::#{key} already exists with value #{found.value.inspect}" unless value == found.value
 
-          warn("ignoring redeclaration of #{name}::#{key} with value #{value} (source: #{caller(5..5).first})")
-          nil
-        else
-          raise NameError, "A #{name} instance with value '#{value}' already exists" if find_by_value(value)
+        warn("ignoring redeclaration of #{name}::#{key} with value #{value.inspect} (source: #{caller(6..6).first})")
+      end
 
-          [key, value]
-        end
+      def valid_value(instance)
+        value = instance.value
+        return value unless (found = find_by_value(value))
+
+        key = instance.key
+        raise NameError, "A #{name} instance with value #{value.inspect} already exists: #{found.key}" unless key == found.key
+
+        # valid_key() should already have warned us, and valid_key_and_value() should have exited early, but just in case
+        warn("ignoring redeclaration of #{name}::#{key} with value #{value.inspect} (source: #{caller(6..6).first})")
       end
 
       def register(instance)
         key, value = valid_key_and_value(instance)
-        return unless key && value
+        return unless key
 
         const_set(key.to_s, instance)
         by_key[key] = instance
@@ -138,16 +150,19 @@ module TypesafeEnum
     end
 
     def to_s
-      "#{self.class}::#{key} [#{ord}] -> #{value}"
+      "#{self.class}::#{key} [#{ord}] -> #{value.inspect}"
     end
 
     private
 
-    def initialize(key, value = nil, &block)
+    IMPLICIT = Class.new.new
+    private_constant :IMPLICIT
+
+    def initialize(key, value = IMPLICIT, &block)
       raise TypeError, "#{key} is not a symbol" unless key.is_a?(Symbol)
 
       @key = key
-      @value = value || key.to_s.downcase
+      @value = value == IMPLICIT ? key.to_s.downcase : value
       @ord = self.class.size
       self.class.class_exec(self) do |instance|
         register(instance)

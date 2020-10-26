@@ -93,6 +93,20 @@ Scale::KILO.value
 # => 1000
 ```
 
+Even `nil` is a valid value (if set explicitly):
+
+```ruby
+class Scheme < TypesafeEnum::Base
+  new :HTTP, 'http'
+  new :HTTPS, 'https'
+  new :EXAMPLE, 'example'
+  new :UNKNOWN, nil
+end
+
+Scheme::UNKNOWN.value
+# => nil
+```
+
 Declaring two instances with the same key will produce an error:
 
 ```ruby

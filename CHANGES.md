@@ -1,5 +1,6 @@
 ## 0.3.0 (next)
 
+- Support explicit nil values
 - Update author email in gemspec
 - Update RuboCop to version 0.91 and pin version
 - Set minimum required_ruby_version to 2.6.0
