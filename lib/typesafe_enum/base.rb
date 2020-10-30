@@ -160,6 +160,7 @@ module TypesafeEnum
     IMPLICIT = Class.new.new
     private_constant :IMPLICIT
 
+    # TODO: is documentation on this still accurate? does it still need to be private?
     def initialize(key, value = IMPLICIT, &block)
       raise TypeError, "#{key} is not a symbol" unless key.is_a?(Symbol)
 
