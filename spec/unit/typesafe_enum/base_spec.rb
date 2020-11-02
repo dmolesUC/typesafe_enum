@@ -144,19 +144,20 @@ module TypesafeEnum
         class ::Extras < Base
           attr_reader :x1
           attr_reader :x2
+
           def initialize(key, x1, x2)
             super(key)
             @x1 = x1
             @x2 = x2
           end
-          
+
           new(:AB, 'a', 'b') do
             def x3
               'c'
             end
           end
         end
-        
+
         expect(Extras::AB.key).to eq(:AB)
         expect(Extras::AB.value).to eq('ab')
         expect(Extras::AB.x1).to eq('a')
