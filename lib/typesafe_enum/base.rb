@@ -29,6 +29,32 @@ module TypesafeEnum
         to_a.each(&block)
       end
 
+      # The set of all keys of all enum instances
+      # @return [Enumerator<Symbol>] All keys of all enums, in declaration order
+      def keys
+        to_a.map(&:key)
+      end
+
+      # The set of all values of all enum instances
+      # @return [Enumerator<Object>] All values of all enums, in declaration order
+      def values
+        to_a.map(&:value)
+      end
+
+      # Iterates over the set of keys of all instances (#keys)
+      # @yield [Enumerator<Symbol>] Each key of each instance of this enum, in declaration order
+      # @return [Enumerator<Symbol>]
+      def each_key(&block)
+        keys.each(&block)
+      end
+
+      # Iterates over the set of values of all instances (#values)
+      # @yield [Enumerator<Object>] Each value of each instance of this enum, in declaration order
+      # @return [Enumerator<Object>]
+      def each_value(&block)
+        values.each(&block)
+      end
+
       # Looks up an enum instance based on its key
       # @param key [Symbol] the key to look up
       # @return [self, nil] the corresponding enum instance, or nil
@@ -137,7 +163,12 @@ module TypesafeEnum
     #   the same enum instance; 1 if this value follows `other`; `nil` if `other`
     #   is not an instance of this enum class
     def <=>(other)
+      # in the case where the enum being compared is actually the parent
+      # class, only `==` will work correctly & we cannot use #is_a? or
+      # #instance_of?
+      # rubocop:disable Style/ClassEqualityComparison
       ord <=> other.ord if self.class == other.class
+      # rubocop:enable Style/ClassEqualityComparison
     end
 
     # Generates a Fixnum hash value for this enum instance
