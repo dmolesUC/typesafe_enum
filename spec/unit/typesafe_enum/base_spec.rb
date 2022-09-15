@@ -179,13 +179,13 @@ module TypesafeEnum
     end
 
     describe :size do
-      it 'returns the number of enum instnaces' do
+      it 'returns the number of enum instances' do
         expect(Suit.size).to eq(4)
       end
     end
 
     describe :count do
-      it 'returns the number of enum instnaces' do
+      it 'returns the number of enum instances' do
         expect(Suit.count).to eq(4)
       end
 
@@ -199,11 +199,47 @@ module TypesafeEnum
     end
 
     describe :each do
-      it 'iterates the enum values' do
+      it 'iterates the enum instances' do
         expected = [Suit::CLUBS, Suit::DIAMONDS, Suit::HEARTS, Suit::SPADES]
         index = 0
         Suit.each do |s|
           expect(s).to be(expected[index])
+          index += 1
+        end
+      end
+    end
+
+    describe :keys do
+      it 'returns all keys of all instances' do
+        expect(Suit.keys).to eq([:CLUBS, :DIAMONDS, :HEARTS, :SPADES])
+      end
+    end
+
+    describe :values do
+      it 'returns all values of all instances' do
+        expect(Suit.values).to eq(%w[clubs diamonds hearts spades])
+      end
+
+    end
+
+    describe :each_key do
+      it 'iterates the enum keys' do
+        expected = [:CLUBS, :DIAMONDS, :HEARTS, :SPADES]
+        index = 0
+        Suit.each_key do |s|
+          expect(s).to eq(expected[index])
+          index += 1
+        end
+      end
+
+    end
+
+    describe :each_value do
+      it 'iterates the enum values' do
+        expected = %w[clubs diamonds hearts spades]
+        index = 0
+        Suit.each_value do |s|
+          expect(s).to eq(expected[index])
           index += 1
         end
       end
