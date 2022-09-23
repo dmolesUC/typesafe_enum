@@ -485,6 +485,38 @@ module TypesafeEnum
       end
     end
 
+    describe :find_by_value! do
+      it 'maps values to enum instances' do
+        values = %w[clubs diamonds hearts spades]
+        expected = Suit.to_a
+        values.each_with_index do |n, index|
+          expect(Suit.find_by_value!(n)).to be(expected[index])
+        end
+      end
+
+      it 'throws EnumValidationError for invalid values' do
+        expect { Suit.find_by_value!('wands') }.to raise_error(Exceptions::EnumValidationError)
+      end
+
+      it 'supports enums with symbol values' do
+        RGBColor.each do |c|
+          expect(RGBColor.find_by_value!(c.value)).to be(c)
+        end
+      end
+
+      it 'supports enums with integer values' do
+        Scale.each do |s|
+          expect(Scale.find_by_value!(s.value)).to be(s)
+        end
+      end
+
+      it 'supports enums with explicit nil values' do
+        Scheme.each do |s|
+          expect(Scheme.find_by_value!(s.value)).to be(s)
+        end
+      end
+    end
+
     describe :find_by_value_str do
       it 'maps string values to enum instances' do
         values = %w[clubs diamonds hearts spades]
@@ -512,7 +544,39 @@ module TypesafeEnum
 
       it 'supports enums with explicit nil values' do
         Scheme.each do |s|
-          expect(Scheme.find_by_value(s.value)).to be(s)
+          expect(Scheme.find_by_value_str(s.value)).to be(s)
+        end
+      end
+    end
+
+    describe :find_by_value_str! do
+      it 'maps string values to enum instances' do
+        values = %w[clubs diamonds hearts spades]
+        expected = Suit.to_a
+        values.each_with_index do |n, index|
+          expect(Suit.find_by_value_str!(n)).to be(expected[index])
+        end
+      end
+
+      it 'throws EnumValidationError for invalid values' do
+        expect { Suit.find_by_value_str!('wands') }.to raise_error(Exceptions::EnumValidationError)
+      end
+
+      it 'supports enums with symbol values' do
+        RGBColor.each do |c|
+          expect(RGBColor.find_by_value_str!(c.value.to_s)).to be(c)
+        end
+      end
+
+      it 'supports enums with integer values' do
+        Scale.each do |s|
+          expect(Scale.find_by_value_str!(s.value.to_s)).to be(s)
+        end
+      end
+
+      it 'supports enums with explicit nil values' do
+        Scheme.each do |s|
+          expect(Scheme.find_by_value_str!(s.value)).to be(s)
         end
       end
     end
