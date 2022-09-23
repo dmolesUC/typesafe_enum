@@ -36,6 +36,12 @@ class Scheme < TypesafeEnum::Base
   new :UNKNOWN, nil
 end
 
+module Super
+  module Modular
+    class Enum < TypesafeEnum::Base; end
+  end
+end
+
 module TypesafeEnum
   describe Base do
 
@@ -598,6 +604,13 @@ module TypesafeEnum
 
       it 'returns nil for invalid indices' do
         expect(Suit.find_by_ord(100)).to be_nil
+      end
+    end
+
+    describe :class_name do
+      it 'returns the demodulized class name' do
+        expect(Super::Modular::Enum.send(:class_name)).to eq "Enum"
+        expect(Suit.send(:class_name)).to eq "Suit"
       end
     end
 

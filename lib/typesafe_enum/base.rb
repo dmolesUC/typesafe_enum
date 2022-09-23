@@ -110,7 +110,6 @@ module TypesafeEnum
         as_array[ord]
       end
 
-
       private
 
       def by_key
@@ -172,7 +171,7 @@ module TypesafeEnum
       # Returns the demodulized class name of the inheriting class
       # @return [String] The demodulized class name
       def class_name
-        name.split(':').last
+        name.split('::').last
       end
     end
 
