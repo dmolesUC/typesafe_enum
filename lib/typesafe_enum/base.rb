@@ -3,6 +3,10 @@
 # A Ruby implementation of Joshua Bloch's
 # [typesafe enum pattern](http://www.oracle.com/technetwork/java/page1-139488.html#replaceenums)
 module TypesafeEnum
+  module Exceptions
+    class EnumValidationError < StandardError; end
+  end
+
   # Base class for typesafe enum classes.
   class Base
     include Comparable
@@ -69,12 +73,32 @@ module TypesafeEnum
         by_value[value]
       end
 
+      # Looks up an enum instance based on its value
+      # @param value [Object] the value to look up
+      # @return [self, EnumValidationError] the corresponding enum instance, or throws #EnumValidationError
+      def find_by_value!(value)
+        valid = find_by_value(value)
+        return valid unless valid.nil?
+
+        raise Exceptions::EnumValidationError, "#{class_name}: #{value} is absurd"
+      end
+
       # Looks up an enum instance based on the string representation of its value
       # @param value_str [String] the string form of the value
       # @return [self, nil] the corresponding enum instance, or nil
       def find_by_value_str(value_str)
         value_str = value_str.to_s
         by_value_str[value_str]
+      end
+
+      # Looks up an enum instance based on the string representation of its value
+      # @param value_str [String] the string form of the value
+      # @return [self, EnumValidationError] the corresponding enum instance, or throws #EnumValidationError
+      def find_by_value_str!(value_str)
+        valid = find_by_value_str(value_str)
+        return valid unless valid.nil?
+
+        raise Exceptions::EnumValidationError, "#{class_name}: #{value_str} is absurd"
       end
 
       # Looks up an enum instance based on its ordinal
@@ -142,6 +166,12 @@ module TypesafeEnum
         by_value[value] = instance
         by_value_str[value.to_s] = instance
         as_array << instance
+      end
+
+      # Returns the demodulized class name of the inheriting class
+      # @return [String] The demodulized class name
+      def class_name
+        name.split('::').last
       end
     end
 
