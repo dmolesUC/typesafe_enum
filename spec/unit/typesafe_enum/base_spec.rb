@@ -36,6 +36,12 @@ class Scheme < TypesafeEnum::Base
   new :UNKNOWN, nil
 end
 
+module Super
+  module Modular
+    class Enum < TypesafeEnum::Base; end
+  end
+end
+
 module TypesafeEnum
   describe Base do
 
@@ -179,13 +185,13 @@ module TypesafeEnum
     end
 
     describe :size do
-      it 'returns the number of enum instnaces' do
+      it 'returns the number of enum instances' do
         expect(Suit.size).to eq(4)
       end
     end
 
     describe :count do
-      it 'returns the number of enum instnaces' do
+      it 'returns the number of enum instances' do
         expect(Suit.count).to eq(4)
       end
 
@@ -199,11 +205,47 @@ module TypesafeEnum
     end
 
     describe :each do
-      it 'iterates the enum values' do
+      it 'iterates the enum instances' do
         expected = [Suit::CLUBS, Suit::DIAMONDS, Suit::HEARTS, Suit::SPADES]
         index = 0
         Suit.each do |s|
           expect(s).to be(expected[index])
+          index += 1
+        end
+      end
+    end
+
+    describe :keys do
+      it 'returns all keys of all instances' do
+        expect(Suit.keys).to eq(%i[CLUBS DIAMONDS HEARTS SPADES])
+      end
+    end
+
+    describe :values do
+      it 'returns all values of all instances' do
+        expect(Suit.values).to eq(%w[clubs diamonds hearts spades])
+      end
+
+    end
+
+    describe :each_key do
+      it 'iterates the enum keys' do
+        expected = %i[CLUBS DIAMONDS HEARTS SPADES]
+        index = 0
+        Suit.each_key do |s|
+          expect(s).to eq(expected[index])
+          index += 1
+        end
+      end
+
+    end
+
+    describe :each_value do
+      it 'iterates the enum values' do
+        expected = %w[clubs diamonds hearts spades]
+        index = 0
+        Suit.each_value do |s|
+          expect(s).to eq(expected[index])
           index += 1
         end
       end
@@ -449,6 +491,38 @@ module TypesafeEnum
       end
     end
 
+    describe :find_by_value! do
+      it 'maps values to enum instances' do
+        values = %w[clubs diamonds hearts spades]
+        expected = Suit.to_a
+        values.each_with_index do |n, index|
+          expect(Suit.find_by_value!(n)).to be(expected[index])
+        end
+      end
+
+      it 'throws EnumValidationError for invalid values' do
+        expect { Suit.find_by_value!('wands') }.to raise_error(Exceptions::EnumValidationError)
+      end
+
+      it 'supports enums with symbol values' do
+        RGBColor.each do |c|
+          expect(RGBColor.find_by_value!(c.value)).to be(c)
+        end
+      end
+
+      it 'supports enums with integer values' do
+        Scale.each do |s|
+          expect(Scale.find_by_value!(s.value)).to be(s)
+        end
+      end
+
+      it 'supports enums with explicit nil values' do
+        Scheme.each do |s|
+          expect(Scheme.find_by_value!(s.value)).to be(s)
+        end
+      end
+    end
+
     describe :find_by_value_str do
       it 'maps string values to enum instances' do
         values = %w[clubs diamonds hearts spades]
@@ -476,7 +550,39 @@ module TypesafeEnum
 
       it 'supports enums with explicit nil values' do
         Scheme.each do |s|
-          expect(Scheme.find_by_value(s.value)).to be(s)
+          expect(Scheme.find_by_value_str(s.value)).to be(s)
+        end
+      end
+    end
+
+    describe :find_by_value_str! do
+      it 'maps string values to enum instances' do
+        values = %w[clubs diamonds hearts spades]
+        expected = Suit.to_a
+        values.each_with_index do |n, index|
+          expect(Suit.find_by_value_str!(n)).to be(expected[index])
+        end
+      end
+
+      it 'throws EnumValidationError for invalid values' do
+        expect { Suit.find_by_value_str!('wands') }.to raise_error(Exceptions::EnumValidationError)
+      end
+
+      it 'supports enums with symbol values' do
+        RGBColor.each do |c|
+          expect(RGBColor.find_by_value_str!(c.value.to_s)).to be(c)
+        end
+      end
+
+      it 'supports enums with integer values' do
+        Scale.each do |s|
+          expect(Scale.find_by_value_str!(s.value.to_s)).to be(s)
+        end
+      end
+
+      it 'supports enums with explicit nil values' do
+        Scheme.each do |s|
+          expect(Scheme.find_by_value_str!(s.value)).to be(s)
         end
       end
     end
@@ -498,6 +604,13 @@ module TypesafeEnum
 
       it 'returns nil for invalid indices' do
         expect(Suit.find_by_ord(100)).to be_nil
+      end
+    end
+
+    describe :class_name do
+      it 'returns the demodulized class name' do
+        expect(Super::Modular::Enum.send(:class_name)).to eq "Enum"
+        expect(Suit.send(:class_name)).to eq "Suit"
       end
     end
 

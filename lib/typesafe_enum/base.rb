@@ -3,6 +3,10 @@
 # A Ruby implementation of Joshua Bloch's
 # [typesafe enum pattern](http://www.oracle.com/technetwork/java/page1-139488.html#replaceenums)
 module TypesafeEnum
+  module Exceptions
+    class EnumValidationError < StandardError; end
+  end
+
   # Base class for typesafe enum classes.
   class Base
     include Comparable
@@ -29,6 +33,32 @@ module TypesafeEnum
         to_a.each(&block)
       end
 
+      # The set of all keys of all enum instances
+      # @return [Enumerator<Symbol>] All keys of all enums, in declaration order
+      def keys
+        to_a.map(&:key)
+      end
+
+      # The set of all values of all enum instances
+      # @return [Enumerator<Object>] All values of all enums, in declaration order
+      def values
+        to_a.map(&:value)
+      end
+
+      # Iterates over the set of keys of all instances (#keys)
+      # @yield [Enumerator<Symbol>] Each key of each instance of this enum, in declaration order
+      # @return [Enumerator<Symbol>]
+      def each_key(&block)
+        keys.each(&block)
+      end
+
+      # Iterates over the set of values of all instances (#values)
+      # @yield [Enumerator<Object>] Each value of each instance of this enum, in declaration order
+      # @return [Enumerator<Object>]
+      def each_value(&block)
+        values.each(&block)
+      end
+
       # Looks up an enum instance based on its key
       # @param key [Symbol] the key to look up
       # @return [self, nil] the corresponding enum instance, or nil
@@ -43,12 +73,32 @@ module TypesafeEnum
         by_value[value]
       end
 
+      # Looks up an enum instance based on its value
+      # @param value [Object] the value to look up
+      # @return [self, EnumValidationError] the corresponding enum instance, or throws #EnumValidationError
+      def find_by_value!(value)
+        valid = find_by_value(value)
+        return valid unless valid.nil?
+
+        raise Exceptions::EnumValidationError, "#{class_name}: #{value} is absurd"
+      end
+
       # Looks up an enum instance based on the string representation of its value
       # @param value_str [String] the string form of the value
       # @return [self, nil] the corresponding enum instance, or nil
       def find_by_value_str(value_str)
         value_str = value_str.to_s
         by_value_str[value_str]
+      end
+
+      # Looks up an enum instance based on the string representation of its value
+      # @param value_str [String] the string form of the value
+      # @return [self, EnumValidationError] the corresponding enum instance, or throws #EnumValidationError
+      def find_by_value_str!(value_str)
+        valid = find_by_value_str(value_str)
+        return valid unless valid.nil?
+
+        raise Exceptions::EnumValidationError, "#{class_name}: #{value_str} is absurd"
       end
 
       # Looks up an enum instance based on its ordinal
@@ -117,6 +167,12 @@ module TypesafeEnum
         by_value_str[value.to_s] = instance
         as_array << instance
       end
+
+      # Returns the demodulized class name of the inheriting class
+      # @return [String] The demodulized class name
+      def class_name
+        name.split('::').last
+      end
     end
 
     # The symbol key for the enum instance
@@ -137,7 +193,12 @@ module TypesafeEnum
     #   the same enum instance; 1 if this value follows `other`; `nil` if `other`
     #   is not an instance of this enum class
     def <=>(other)
+      # in the case where the enum being compared is actually the parent
+      # class, only `==` will work correctly & we cannot use #is_a? or
+      # #instance_of?
+      # rubocop:disable Style/ClassEqualityComparison
       ord <=> other.ord if self.class == other.class
+      # rubocop:enable Style/ClassEqualityComparison
     end
 
     # Generates a Fixnum hash value for this enum instance
