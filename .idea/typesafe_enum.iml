@@ -10,7 +10,11 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="ansi (v1.5.0, RVM: ruby-2.7.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ast (v2.4.2, RVM: ruby-2.7.5) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="builder (v3.2.4, RVM: ruby-2.7.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="bundler (v2.2.31, RVM: ruby-2.7.5) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="ci_reporter (v2.0.0, RVM: ruby-2.7.5) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="ci_reporter_rspec (v1.0.0, RVM: ruby-2.7.5) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="colorize (v0.8.1, RVM: ruby-2.7.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="diff-lcs (v1.5.0, RVM: ruby-2.7.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="docile (v1.4.0, RVM: ruby-2.7.5) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="parallel (v1.22.1, RVM: ruby-2.7.5) [gem]" level="application" />
@@ -42,26 +46,7 @@
   </component>
   <component name="RakeTasksCache">
     <option name="myRootTask">
-      <RakeTaskImpl id="rake">
-        <subtasks>
-          <RakeTaskImpl description="Run all unit tests with coverage" fullCommand="coverage" id="coverage" />
-          <RakeTaskImpl description="Run unit tests, check test coverage, run acceptance tests, check code style" fullCommand="default" id="default" />
-          <RakeTaskImpl description="Run RuboCop" fullCommand="rubocop" id="rubocop" />
-          <RakeTaskImpl id="rubocop">
-            <subtasks>
-              <RakeTaskImpl description="Auto-correct RuboCop offenses" fullCommand="rubocop:auto_correct" id="auto_correct" />
-            </subtasks>
-          </RakeTaskImpl>
-          <RakeTaskImpl description="Run all tests" fullCommand="spec" id="spec" />
-          <RakeTaskImpl id="spec">
-            <subtasks>
-              <RakeTaskImpl description="Run all unit tests" fullCommand="spec:unit" id="unit" />
-              <RakeTaskImpl description="" fullCommand="spec:all" id="all" />
-            </subtasks>
-          </RakeTaskImpl>
-          <RakeTaskImpl description="List TODOs (from spec/todo.rb)" fullCommand="todo" id="todo" />
-        </subtasks>
-      </RakeTaskImpl>
+      <RakeTaskImpl id="rake" />
     </option>
   </component>
 </module>

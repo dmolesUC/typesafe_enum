@@ -7,8 +7,8 @@ require 'uri'
 require 'typesafe_enum/module_info'
 
 Gem::Specification.new do |spec|
-  spec.name          = TypesafeEnum::NAME
-  spec.version       = TypesafeEnum::VERSION
+  spec.name          = TypesafeEnum::ModuleInfo::NAME
+  spec.version       = TypesafeEnum::ModuleInfo::VERSION
   spec.authors       = ['David Moles']
   spec.email         = ['dmoles@berkeley.edu']
   spec.summary       = 'Typesafe enum pattern for Ruby'
@@ -25,6 +25,8 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 2.7'
 
+  spec.add_development_dependency 'ci_reporter_rspec', '~> 1.0'
+  spec.add_development_dependency 'colorize', '~> 0.8'
   spec.add_development_dependency 'rake', '~> 12.3', '>= 12.3.3'
   spec.add_development_dependency 'rspec', '~> 3.9'
   spec.add_development_dependency 'rubocop', '0.91'
