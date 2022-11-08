@@ -1,5 +1,12 @@
 ## 0.3.1 (next)
 
+- Add `values`, `keys`, `each_value`, `each_key`, `find_by_value!`, `find_by_value_str!`
+  (PR [#8](https://github.com/dmolesUC/typesafe_enum/pull/8))
+- Set minimum required_ruby_version to 2.7 to reflect 2.6 
+  [end of life](https://www.ruby-lang.org/en/news/2022/04/12/ruby-2-6-10-released/)
+- Bump .ruby-version to 2.7
+- Bump Rake version to 13 for 2.x/3.x compatibility
+
 ## 0.3.0 (26 October 2020)
 
 - Support explicit nil values
