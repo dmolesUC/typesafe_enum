@@ -50,6 +50,9 @@ module TypesafeEnum
       end
     end
 
+    # Default implementation includes the enum class, `key`,
+    # `ord` and `value`.
+    # @return [String] a string representation of the enum instance
     def to_s
       "#{self.class}::#{key} [#{ord}] -> #{value.inspect}"
     end

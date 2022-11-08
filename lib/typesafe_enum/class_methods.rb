@@ -1,4 +1,5 @@
 module TypesafeEnum
+  # Class methods for {{TypesafeEnum::Base}}.
   module ClassMethods
     include Enumerable
 
