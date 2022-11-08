@@ -609,8 +609,8 @@ module TypesafeEnum
 
     describe :class_name do
       it 'returns the demodulized class name' do
-        expect(Super::Modular::Enum.send(:class_name)).to eq "Enum"
-        expect(Suit.send(:class_name)).to eq "Suit"
+        expect(Super::Modular::Enum.send(:class_name)).to eq 'Enum'
+        expect(Suit.send(:class_name)).to eq 'Suit'
       end
     end
 
