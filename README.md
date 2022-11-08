@@ -1,6 +1,6 @@
 # TypesafeEnum
 
-[![Build Status](https://travis-ci.org/dmolesUC/typesafe_enum.svg?branch=master)](https://travis-ci.org/dmolesUC/typesafe_enum)
+[![Build Status](https://github.com/dmolesUC/typesafe_enum/actions/workflows/build.yml/badge.svg?branch=master)](https://travis-ci.org/dmolesUC/typesafe_enum)
 [![Code Climate](https://codeclimate.com/github/dmolesUC/typesafe_enum.svg)](https://codeclimate.com/github/dmolesUC/typesafe_enum)
 [![Inline docs](http://inch-ci.org/github/dmolesUC/typesafe_enum.svg)](http://inch-ci.org/github/dmolesUC/typesafe_enum)
 [![Gem Version](https://img.shields.io/gem/v/typesafe_enum.svg)](https://github.com/dmolesUC/typesafe_enum/releases)
