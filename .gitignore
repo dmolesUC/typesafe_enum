@@ -7,6 +7,9 @@
 # https://youtrack.jetbrains.com/issue/IDEA-233049
 .idea/$CACHE_FILE$
 
+# Build artifacts
+/artifacts/
+
 ############################################################
 # Generated ignores
 
